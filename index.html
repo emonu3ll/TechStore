@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechStore — Tienda de Tecnología</title>
+<meta name="description" content="Catálogo de notebooks, componentes, periféricos, gaming y celulares. Todo el contenido de esta página se personaliza desde el panel de administración.">
+
+<!-- Fuentes: JetBrains Mono (títulos/etiquetas) + Inter (texto) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ======================================================
+     HEADER
+     ====================================================== -->
+<header>
+  <div class="wrap header-inner">
+    <a href="#" class="logo">
+      <!-- data-editable: nombre del negocio (panel admin > Sitio > Encabezado) -->
+      <span data-editable="nombre-negocio">Tech<span class="dot">Store</span></span>
+    </a>
+
+    <nav class="main-nav">
+      <a href="#categorias">Categorías</a>
+      <a href="#productos">Productos</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#faq">Preguntas</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="search-btn" aria-label="Buscar productos" id="searchToggle">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="menu-toggle" aria-label="Abrir menú" id="menuToggle">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ======================================================
+     HERO
+     ====================================================== -->
+<section class="hero">
+  <div class="schema-grid" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <div class="reveal in">
+      <span class="eyebrow">Catálogo actualizado esta semana</span>
+      <h1>Tecnología real,<br>a <span class="accent">precio real.</span></h1>
+      <p class="lead" data-editable="hero-texto">
+        Notebooks, componentes, periféricos y celulares seleccionados por su relación
+        calidad-precio. Envíos a todo el país y soporte directo por WhatsApp.
+      </p>
+      <div class="hero-cta">
+        <a href="#productos" class="btn btn-primary">Ver catálogo</a>
+        <a href="#contacto" class="btn btn-outline">Hablar por WhatsApp</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">120+</div>
+          <div class="stat-label">Productos</div>
+        </div>
+        <div>
+          <div class="stat-num">6</div>
+          <div class="stat-label">Categorías</div>
+        </div>
+        <div>
+          <div class="stat-num">24h</div>
+          <div class="stat-label">Respuesta</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-card reveal in">
+      <div class="spec-visual" style="background-image:url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=700&q=75&auto=format&fit=crop');"></div>
+      <div class="spec-row"><span>Modelo</span><span>Producto destacado</span></div>
+      <div class="spec-row"><span>Categoría</span><span>Notebooks</span></div>
+      <div class="spec-row"><span>Estado</span><span>En stock</span></div>
+      <div class="spec-row"><span>Precio desde</span><span>Gs. 0.000.000</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     CATEGORÍAS
+     ====================================================== -->
+<section class="categories" id="categorias">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Explorar</span>
+        <h2>Categorías</h2>
+      </div>
+      <p>Seis rubros principales. Se pueden agregar, renombrar o quitar desde el admin sin tocar código.</p>
+    </div>
+  </div>
+
+  <div class="cat-grid reveal">
+    <div class="cat-card" data-cat="notebooks">
+      <div class="cat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="12" rx="1"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+      </div>
+      <div class="cat-name">Notebooks</div>
+      <div class="cat-count">32 productos</div>
+    </div>
+    <div class="cat-card" data-cat="perifericos">
+      <div class="cat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="10.01"/><line x1="10" y1="10" x2="10" y2="10.01"/></svg>
+      </div>
+      <div class="cat-name">Periféricos</div>
+      <div class="cat-count">28 productos</div>
+    </div>
+    <div class="cat-card" data-cat="componentes">
+      <div class="cat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="1"/><line x1="9" y1="4" x2="9" y2="2"/><line x1="15" y1="4" x2="15" y2="2"/><line x1="9" y1="22" x2="9" y2="20"/><line x1="15" y1="22" x2="15" y2="20"/></svg>
+      </div>
+      <div class="cat-name">Componentes</div>
+      <div class="cat-count">45 productos</div>
+    </div>
+    <div class="cat-card" data-cat="gaming">
+      <div class="cat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="7" width="20" height="10" rx="5"/><line x1="7" y1="12" x2="7" y2="12.01"/><line x1="17" y1="10" x2="17" y2="10.01"/><line x1="15" y1="13" x2="15" y2="13.01"/></svg>
+      </div>
+      <div class="cat-name">Gaming</div>
+      <div class="cat-count">19 productos</div>
+    </div>
+    <div class="cat-card" data-cat="celulares">
+      <div class="cat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      </div>
+      <div class="cat-name">Celulares</div>
+      <div class="cat-count">21 productos</div>
+    </div>
+    <div class="cat-card" data-cat="accesorios">
+      <div class="cat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      </div>
+      <div class="cat-name">Accesorios</div>
+      <div class="cat-count">16 productos</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     PRODUCTOS
+     ====================================================== -->
+<section id="productos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Catálogo</span>
+        <h2>Productos destacados</h2>
+      </div>
+      <p>Esta grilla se va a conectar a Firestore: cada tarjeta sale de la base de datos que carga el admin.</p>
+    </div>
+
+    <div class="filters-bar reveal">
+      <span class="filter-chip active">Todos</span>
+      <span class="filter-chip">Notebooks</span>
+      <span class="filter-chip">Periféricos</span>
+      <span class="filter-chip">Componentes</span>
+      <span class="filter-chip">Gaming</span>
+      <span class="filter-chip">Celulares</span>
+      <span class="filter-chip">Accesorios</span>
+    </div>
+
+    <div class="product-grid reveal" id="productGrid">
+      <!-- Tarjeta de producto (x8) — plantilla repetible, luego generada por JS desde Firestore -->
+
+      <div class="product-card">
+        <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&q=70&auto=format&fit=crop');">
+          <span class="product-badge">Nuevo</span>
+          <span class="product-sku">SKU-0192</span>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Notebooks</div>
+          <div class="product-name">Notebook 15.6" Ryzen 5 · 16GB · 512GB SSD</div>
+          <div class="product-price-row">
+            <span class="product-price">Gs. 6.490.000</span>
+            <button class="product-add" aria-label="Consultar producto">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1756388371735-cc845c578200?w=500&q=70&auto=format&fit=crop');">
+          <span class="product-sku">SKU-0231</span>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Periféricos</div>
+          <div class="product-name">Teclado mecánico RGB switch rojo</div>
+          <div class="product-price-row">
+            <span class="product-price">Gs. 389.000</span>
+            <button class="product-add" aria-label="Consultar producto">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1515630278258-407f66498911?w=500&q=70&auto=format&fit=crop');">
+          <span class="product-badge">Oferta</span>
+          <span class="product-sku">SKU-0304</span>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Componentes</div>
+          <div class="product-name">Placa de video 8GB GDDR6</div>
+          <div class="product-price-row">
+            <span class="product-price">Gs. 3.150.000</span>
+            <button class="product-add" aria-label="Consultar producto">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1522199755839-a2bacb67c546?w=500&q=70&auto=format&fit=crop');">
+          <span class="product-sku">SKU-0356</span>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Gaming</div>
+          <div class="product-name">Silla gamer ergonómica reclinable</div>
+          <div class="product-price-row">
+            <span class="product-price">Gs. 980.000</span>
+            <button class="product-add" aria-label="Consultar producto">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1580910051074-3eb694886505?w=500&q=70&auto=format&fit=crop');">
+          <span class="product-sku">SKU-0412</span>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Celulares</div>
+          <div class="product-name">Smartphone 128GB · 8GB RAM</div>
+          <div class="product-price-row">
+            <span class="product-price">Gs. 2.890.000</span>
+            <button class="product-add" aria-label="Consultar producto">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1585816517178-2398c69d12c6?w=500&q=70&auto=format&fit=crop');">
+          <span class="product-sku">SKU-0468</span>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Periféricos</div>
+          <div class="product-name">Mouse inalámbrico 16000 DPI</div>
+          <div class="product-price-row">
+            <span class="product-price">Gs. 219.000</span>
+            <button class="product-add" aria-label="Consultar producto">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1522199755839-a2bacb67c546?w=500&q=70&auto=format&fit=crop');">
+          <span class="product-badge">Nuevo</span>
+          <span class="product-sku">SKU-0501</span>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Accesorios</div>
+          <div class="product-name">Cargador rápido 65W GaN</div>
+          <div class="product-price-row">
+            <span class="product-price">Gs. 145.000</span>
+            <button class="product-add" aria-label="Consultar producto">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1515630278258-407f66498911?w=500&q=70&auto=format&fit=crop');">
+          <span class="product-sku">SKU-0549</span>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Componentes</div>
+          <div class="product-name">SSD NVMe 1TB Gen4</div>
+          <div class="product-price-row">
+            <span class="product-price">Gs. 610.000</span>
+            <button class="product-add" aria-label="Consultar producto">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-footer-cta reveal">
+      <a href="#" class="btn btn-outline">Ver todo el catálogo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     SOBRE NOSOTROS
+     ====================================================== -->
+<section class="about" id="nosotros">
+  <div class="wrap about-inner">
+    <div class="about-visual reveal" style="background-image:url('https://images.unsplash.com/photo-1761494296583-99b15e9063c5?w=700&q=75&auto=format&fit=crop');"></div>
+    <div class="about-text reveal">
+      <span class="eyebrow">Quiénes somos</span>
+      <h2 data-editable="nosotros-titulo">Vendemos tecnología, no promesas.</h2>
+      <p data-editable="nosotros-texto">
+        Somos un equipo local especializado en tecnología, con productos verificados
+        y garantía real. Este texto, igual que las fotos y los datos de contacto,
+        se edita completo desde el panel de administración — sin tocar una línea de código.
+      </p>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="num">01</div>
+          <h4>Garantía oficial</h4>
+          <p>Todos los productos con garantía y soporte post-venta.</p>
+        </div>
+        <div class="about-feature">
+          <div class="num">02</div>
+          <h4>Envíos a todo el país</h4>
+          <p>Coordinamos entrega en Asunción e interior.</p>
+        </div>
+        <div class="about-feature">
+          <div class="num">03</div>
+          <h4>Pago flexible</h4>
+          <p>Efectivo, transferencia y tarjetas.</p>
+        </div>
+        <div class="about-feature">
+          <div class="num">04</div>
+          <h4>Atención directa</h4>
+          <p>Consultas por WhatsApp, respuesta en el día.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     PREGUNTAS FRECUENTES
+     ====================================================== -->
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Ayuda</span>
+        <h2>Preguntas frecuentes</h2>
+      </div>
+      <p>Editables desde el admin — se pueden agregar o quitar preguntas sin tocar código.</p>
+    </div>
+
+    <div class="faq-list reveal" id="faqList">
+      <div class="faq-item open">
+        <button class="faq-question">
+          ¿Hacen envíos al interior del país?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Sí, coordinamos envío a todo Paraguay a través de encomiendas. El costo y el tiempo
+          de entrega varían según la localidad.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          ¿Los productos tienen garantía?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Todos los productos cuentan con garantía. El plazo depende del fabricante y la
+          categoría — se detalla en cada ficha de producto.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          ¿Qué medios de pago aceptan?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Efectivo, transferencia bancaria y tarjetas de crédito/débito. Consultanos por
+          WhatsApp si necesitás otra modalidad.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          ¿Puedo retirar en el local?
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Sí, podés coordinar el retiro en nuestro local. Te compartimos la dirección exacta
+          por WhatsApp al confirmar la compra.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     CONTACTO / FOOTER
+     ====================================================== -->
+<footer id="contacto">
+  <div class="wrap footer-top">
+    <div class="footer-brand">
+      <div class="logo">Tech<span class="dot">Store</span></div>
+      <p data-editable="footer-descripcion">
+        Tienda de tecnología: notebooks, componentes, periféricos, gaming y celulares,
+        con atención directa y envíos a todo el país.
+      </p>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="TikTok">TT</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Categorías</h5>
+      <a href="#">Notebooks</a>
+      <a href="#">Periféricos</a>
+      <a href="#">Componentes</a>
+      <a href="#">Gaming</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Ayuda</h5>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#faq">Preguntas</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+
+    <div class="footer-col">
+      <h5>Contacto</h5>
+      <p data-editable="contacto-whatsapp">WhatsApp: +595 9__ ___ ___</p>
+      <p data-editable="contacto-email">correo@techstore.com.py</p>
+      <p data-editable="contacto-direccion">Curuguaty, Canindeyú, Paraguay</p>
+    </div>
+  </div>
+
+  <div class="wrap footer-bottom">
+    <span>© 2026 TechStore. Todos los derechos reservados.</span>
+    <span>Sitio desarrollado a medida.</span>
+  </div>
+</footer>
+
+<!-- ======================================================
+     WHATSAPP FLOTANTE
+     ====================================================== -->
+<div class="wa-float">
+  <div class="wa-bubble" id="waBubble">
+    <div class="wa-bubble-name">Atención TechStore</div>
+    ¡Hola! 👋 ¿En qué producto estás interesado? Escribinos y te respondemos al toque.
+  </div>
+  <a href="https://wa.me/595900000000?text=Hola%2C%20quiero%20hacer%20una%20consulta" target="_blank" rel="noopener" class="wa-btn" id="waBtn" aria-label="Contactar por WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.9 8.9 0 0 0 12.05 4a8.94 8.94 0 0 0-7.87 13.24L3 21l3.9-1.02A8.93 8.93 0 0 0 12.05 21a8.94 8.94 0 0 0 5.55-15.68ZM12.05 19.4a7.4 7.4 0 0 1-3.78-1.04l-.27-.16-2.82.74.75-2.75-.18-.28a7.42 7.42 0 1 1 6.3 3.49Zm4.07-5.56c-.22-.11-1.31-.65-1.51-.72-.2-.07-.35-.11-.5.11-.15.22-.57.72-.7.87-.13.15-.26.16-.48.05-.22-.11-.94-.35-1.79-1.11-.66-.59-1.11-1.32-1.24-1.54-.13-.22-.01-.34.1-.45.1-.1.22-.26.33-.39.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.39-.06-.11-.5-1.21-.69-1.66-.18-.43-.36-.37-.5-.38-.13-.01-.28-.01-.43-.01-.15 0-.39.06-.6.28-.2.22-.79.77-.79 1.87 0 1.1.81 2.17.92 2.32.11.15 1.6 2.44 3.87 3.42.54.23.96.37 1.29.48.54.17 1.03.15 1.42.09.43-.06 1.31-.53 1.5-1.05.18-.51.18-.95.13-1.05-.06-.09-.2-.15-.42-.26Z"/></svg>
+  </a>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
