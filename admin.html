@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - TechStore</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===========================================
+           RESET Y BASE
+           (autocontenido: no depende de style.css
+           del sitio público, que usa un tema distinto)
+           =========================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        html, body { background: #f5f5f5; }
+        a { color: inherit; }
+
+        /* ===========================================
+           LOGIN
+           =========================================== */
+        .admin-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a5f 0%, #4CAF50 100%); position: relative; padding: 20px; }
+        .login-box { background: white; padding: 40px 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px; text-align: center; }
+        .login-logo { width: 90px; height: 90px; border-radius: 50%; background: #1e3a5f; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 26px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .login-logo .dot { color: #4CAF50; }
+        .login-box h2 { color: #1e293b; margin-bottom: 25px; font-size: 20px; font-weight: 700; line-height: 1.3; }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; color: #1e3a5f; font-weight: bold; font-size: 14px; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;
+            font-size: 14px; transition: border-color 0.3s; box-sizing: border-box;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #4CAF50; }
+        .form-group small { display: block; color: #666; font-size: 12px; margin-top: 6px; }
+
+        .login-box .form-group input { border-radius: 25px; padding: 14px 20px; border: 1px solid #dddfe2; font-size: 15px; }
+        .login-box .form-group input:focus { border-color: #4CAF50; box-shadow: 0 0 0 3px rgba(76,175,80,0.15); }
+
+        .btn-login, .btn-save {
+            width: 100%; padding: 15px; background: #4CAF50; color: white; border: none;
+            border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s;
+        }
+        .btn-login:hover, .btn-save:hover { background: #45a049; }
+        .login-box .btn-login { border-radius: 25px; font-size: 17px; padding: 14px; margin-top: 5px; }
+
+        .login-error { display: none; background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 18px; }
+        .login-error.show { display: block; }
+
+        .back-home-btn {
+            position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.9); color: #1e3a5f;
+            border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: all 0.3s;
+        }
+        .back-home-btn:hover { background: white; transform: translateX(-5px); }
+
+        /* ===========================================
+           PANEL DE ADMINISTRACIÓN
+           =========================================== */
+        .admin-panel { display: none; min-height: 100vh; background: #f5f5f5; }
+        .admin-panel.show { display: block; }
+
+        .admin-header {
+            background: #1e3a5f; color: white; padding: 20px;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+        }
+        .admin-header h1 { font-family: 'Cinzel', serif; font-size: 24px; margin: 0; }
+        .admin-header-left { display: flex; align-items: center; gap: 20px; }
+        .admin-header-left #welcome-message { margin: 4px 0 0 0; font-size: 13px; color: rgba(255,255,255,0.85); font-weight: normal; }
+
+        .btn-back, .btn-logout {
+            border: none; padding: 10px 16px; border-radius: 5px; cursor: pointer; font-weight: bold;
+            display: flex; align-items: center; gap: 8px; transition: all 0.3s;
+        }
+        .btn-back { background: rgba(255,255,255,0.2); color: white; }
+        .btn-back:hover { background: rgba(255,255,255,0.3); }
+        .btn-logout { background: #f44336; color: white; }
+        .btn-logout:hover { background: #d32f2f; }
+
+        @media (max-width: 600px) {
+            .admin-header { flex-direction: column; align-items: flex-start; padding: 16px; }
+            .admin-header h1 { font-size: 18px; }
+            .admin-header-left { flex-wrap: wrap; gap: 10px; }
+            .btn-logout { width: 100%; justify-content: center; }
+        }
+
+        .admin-content { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .admin-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .admin-card h2 { color: #1e3a5f; margin-bottom: 6px; font-family: 'Cinzel', serif; margin-top: 0; font-size: 20px; }
+        .admin-card .card-desc { color: #666; font-size: 13px; margin-bottom: 20px; }
+
+        /* Drop zone de imágenes */
+        .drop-zone {
+            border: 3px dashed #4CAF50; border-radius: 18px; padding: 40px; text-align: center;
+            margin-bottom: 20px; cursor: pointer; transition: all 0.3s; background: #f9f9f9;
+        }
+        .drop-zone:hover, .drop-zone.dragover { background: #e8f5e9; border-color: #45a049; }
+        .drop-zone i { font-size: 48px; color: #4CAF50; margin-bottom: 10px; }
+        .drop-zone p { margin: 0; }
+
+        .image-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+        .image-preview .img-wrap { position: relative; }
+        .image-preview img { width: 100%; height: 140px; object-fit: cover; background: #f0f0f0; border-radius: 14px; border: 2px solid #e0e0e0; display: block; }
+        .image-preview .remove-img {
+            position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; background: #f44336; color: white;
+            border-radius: 50%; border: none; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Fila de dos botones */
+        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-row > * { flex: 1; min-width: 140px; }
+        .btn-outline-gray {
+            padding: 15px; background: #757575; color: white; border: none; border-radius: 8px;
+            font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s;
+        }
+        .btn-outline-gray:hover { background: #616161; }
+        .btn-orange {
+            padding: 15px; background: #FF9800; color: white; border: none; border-radius: 8px;
+            font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s;
+        }
+        .btn-orange:hover { background: #F57C00; }
+        .btn-blue {
+            background: #2196F3; color: white; padding: 10px 18px; border: none; border-radius: 10px;
+            cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px;
+        }
+
+        /* Vista previa del precio */
+        .price-preview-box { padding: 15px; background: #f0f0f0; border-radius: 8px; font-size: 16px; text-align: center; color: #999; }
+
+        /* Item de producto en la lista */
+        .product-item { display: flex; gap: 20px; padding: 20px; border-bottom: 1px solid #e0e0e0; align-items: center; }
+        .product-item:last-child { border-bottom: none; }
+        .product-item img { width: 90px; height: 90px; object-fit: cover; background: #f0f0f0; border-radius: 14px; flex-shrink: 0; }
+        .product-item-info { flex: 1; }
+        .product-item-info h3 { color: #1e3a5f; margin: 0 0 5px 0; font-size: 16px; }
+        .product-item-info .price { color: #4CAF50; font-weight: bold; font-size: 17px; margin: 0 0 5px 0; }
+        .product-item-info .meta { color: #999; font-size: 12px; }
+        .product-item-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .icon-btn { width: 38px; height: 38px; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .icon-btn.edit { background: #e3f2fd; color: #1976d2; }
+        .icon-btn.delete { background: #ffebee; color: #c62828; }
+
+        .status-pill { display: inline-block; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 12px; margin-left: 8px; }
+        .status-pill.ok { background: #e8f5e9; color: #2e7d32; }
+        .status-pill.low { background: #fff3e0; color: #e65100; }
+        .status-pill.out { background: #ffebee; color: #c62828; }
+
+        @media (max-width: 768px) {
+            .product-item { flex-direction: column; text-align: center; }
+            .product-item img { width: 100%; height: 180px; }
+            .product-item-actions { width: 100%; justify-content: center; }
+        }
+
+        /* Bloque destacado (features, datos privados, etc.) */
+        .highlight-box { background: #f0f7ff; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
+        .warning-box { background: #fff3e0; padding: 15px; border-radius: 12px; border: 2px dashed #FF9800; margin-bottom: 20px; }
+
+        /* Filas de redes sociales dinámicas */
+        .social-row { display: flex; gap: 8px; margin-bottom: 8px; }
+        .social-row select { flex: 0 0 130px; }
+        .social-row input { flex: 1; }
+        .social-row .remove-social { background: #ffebee; color: #c62828; border: none; border-radius: 8px; width: 42px; cursor: pointer; }
+
+        /* ===========================================
+           MODAL DE RECORTE DE IMAGEN
+           =========================================== */
+        .crop-modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; padding: 20px;
+        }
+        .crop-modal-overlay.show { display: flex; }
+        .crop-modal-box { background: white; border-radius: 15px; padding: 20px; max-width: 520px; width: 100%; }
+        .crop-modal-box h3 { color: #1e3a5f; margin-bottom: 15px; text-align: center; font-family: 'Cinzel', serif; }
+        #crop-container {
+            position: relative; width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 10px;
+            overflow: hidden; touch-action: none; user-select: none;
+        }
+        #crop-image { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
+        #crop-rect { position: absolute; box-shadow: 0 0 0 9999px rgba(0,0,0,0.6); border: 2px solid white; cursor: move; }
+        .crop-grid-line { position: absolute; background: rgba(255,255,255,0.5); }
+        .crop-handle { position: absolute; width: 22px; height: 22px; }
+        .crop-hint { text-align: center; color: #999; font-size: 12px; margin-top: 10px; }
+
+        /* ===========================================
+           MODAL DE CONFIRMACIÓN
+           =========================================== */
+        .confirm-modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; padding: 20px;
+        }
+        .confirm-modal-overlay.show { display: flex; }
+        .confirm-modal-box { background: white; border-radius: 15px; padding: 30px; max-width: 400px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center; }
+        .confirm-modal-box .emoji { font-size: 40px; margin-bottom: 15px; }
+        .confirm-modal-box h3 { color: #1e3a5f; font-family: 'Cinzel', serif; margin-bottom: 12px; }
+        .confirm-modal-box p { color: #666; margin-bottom: 25px; line-height: 1.5; }
+
+        /* ===========================================
+           TOASTS
+           =========================================== */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; max-width: calc(100% - 40px); }
+        .toast {
+            background: #1e3a5f; color: white; padding: 14px 18px; border-radius: 8px; font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 10px;
+            opacity: 0; transform: translateY(10px); transition: all 0.25s ease;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #2e7d32; }
+        .toast.error { background: #c62828; }
+    </style>
+</head>
+<body>
+
+<!-- ======================================================
+     LOGIN
+     ====================================================== -->
+<div class="admin-login" id="admin-login">
+    <button class="back-home-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i> Volver al Inicio
+    </button>
+
+    <div class="login-box">
+        <div class="login-logo">TS<span class="dot"></span></div>
+        <h2>Panel de Administración<br>TechStore</h2>
+
+        <div class="login-error" id="login-error">Correo o contraseña incorrectos.</div>
+
+        <div class="form-group">
+            <input type="email" id="username" placeholder="Correo electrónico">
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" placeholder="Contraseña">
+        </div>
+        <button class="btn-login" onclick="login()">Iniciar Sesión</button>
+        <p style="margin-top: 16px; font-size: 12px; color: #999;">Acceso solo para administradores autorizados.</p>
+    </div>
+</div>
+
+<!-- ======================================================
+     PANEL DE ADMINISTRACIÓN
+     ====================================================== -->
+<div class="admin-panel" id="admin-panel">
+    <div class="admin-header">
+        <div class="admin-header-left">
+            <button class="btn-back" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+            <div>
+                <h1>💻 Panel de Administración</h1>
+                <p id="welcome-message"></p>
+            </div>
+        </div>
+        <button class="btn-logout" onclick="confirmLogout()">Cerrar Sesión</button>
+    </div>
+
+    <div class="admin-content">
+
+        <!-- ============ AGREGAR / EDITAR PRODUCTO ============ -->
+        <div class="admin-card">
+            <h2>📤 Agregar Nuevo Producto</h2>
+            <p class="card-desc">Cargá fotos, precio y detalles del producto. Las fotos se comprimen automáticamente al subir.</p>
+
+            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Arrastrá las fotos aquí o hacé clic para seleccionar</p>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">(PC: arrastrar archivos | Celular: tocar para abrir galería)</p>
+            </div>
+            <input type="file" id="file-input" multiple accept="image/*" style="display: none;" onchange="handleFiles(this.files)">
+
+            <div class="image-preview" id="image-preview"></div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Nombre del producto</label>
+                <input type="text" id="prod-title" placeholder='Ej: Notebook 15.6" Ryzen 5 · 16GB · 512GB SSD'>
+            </div>
+
+            <div class="form-group">
+                <label>Categoría</label>
+                <select id="prod-category">
+                    <option value="notebooks">💻 Notebooks</option>
+                    <option value="perifericos">⌨️ Periféricos</option>
+                    <option value="componentes">🔧 Componentes</option>
+                    <option value="gaming">🎮 Gaming</option>
+                    <option value="celulares">📱 Celulares</option>
+                    <option value="accesorios">🔌 Accesorios</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>🏷️ Estado de stock</label>
+                <select id="prod-status">
+                    <option value="stock">🟢 En stock</option>
+                    <option value="ultimas">🟡 Últimas unidades</option>
+                    <option value="sinstock">🔴 Sin stock</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>🏷️ Badge/Etiqueta (opcional)</label>
+                <select id="prod-badge">
+                    <option value="">Sin badge</option>
+                    <option value="oferta">🔴 Oferta</option>
+                    <option value="nuevo">🟢 Nuevo</option>
+                    <option value="destacado">🔵 Destacado</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>💵 Precio en Guaraníes</label>
+                <input type="text" id="prod-price-gs" placeholder="Ej: 6490000" oninput="formatNumber(this); updatePricePreview();">
+            </div>
+            <div class="form-group">
+                <label>💵 Precio en USD (opcional)</label>
+                <input type="text" id="prod-price-usd" placeholder="Ej: 850" oninput="formatNumber(this); updatePricePreview();">
+            </div>
+
+            <div class="form-group">
+                <label style="color: #4CAF50;">👁️ Se mostrará en la página:</label>
+                <div class="price-preview-box" id="price-preview">Completá los campos de arriba</div>
+            </div>
+
+            <div class="form-group">
+                <label>SKU (opcional)</label>
+                <input type="text" id="prod-sku" placeholder="Se genera automático si lo dejás vacío">
+            </div>
+
+            <div class="form-group">
+                <label>Descripción</label>
+                <textarea id="prod-description" rows="4" placeholder="Detalles del producto, garantía, etc."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Especificaciones (separadas por coma)</label>
+                <input type="text" id="prod-specs" placeholder="Ej: 16GB RAM, 512GB SSD, Ryzen 5 5500U, Pantalla 15.6&quot;">
+            </div>
+
+            <div class="warning-box">
+                <label>📦 Proveedor (privado, solo visible en este panel)</label>
+                <input type="text" id="prod-supplier-name" placeholder="Nombre del proveedor" style="margin-bottom: 10px;">
+                <input type="text" id="prod-supplier-phone" placeholder="Ej: 0986767459" oninput="formatOwnerPhone(this)">
+                <small>Este dato nunca se muestra en el sitio público, solo lo ven los administradores.</small>
+            </div>
+
+            <input type="hidden" id="edit-product-id" value="">
+
+            <div class="btn-row">
+                <button class="btn-save" onclick="saveProduct()">
+                    <i class="fas fa-save"></i> Guardar Producto
+                </button>
+                <button class="btn-orange" onclick="saveDraftManual()">
+                    <i class="fas fa-clock"></i> Guardar Borrador
+                </button>
+                <button class="btn-outline-gray" onclick="cancelEdit()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+
+        <!-- ============ LISTA DE PRODUCTOS ============ -->
+        <div class="admin-card">
+            <h2 style="margin-bottom: 20px;">📋 Productos Publicados</h2>
+            <div id="products-container"></div>
+        </div>
+
+        <!-- ============ FAQ ============ -->
+        <div class="admin-card">
+            <h2 style="margin-bottom: 20px;">❓ Preguntas Frecuentes</h2>
+            <div class="form-group">
+                <label>Pregunta</label>
+                <input type="text" id="faq-question-input" placeholder="Ej: ¿Hacen envíos al interior del país?">
+            </div>
+            <div class="form-group">
+                <label>Respuesta</label>
+                <textarea id="faq-answer-input" rows="3" placeholder="Escribí la respuesta completa..."></textarea>
+            </div>
+            <input type="hidden" id="edit-faq-id" value="">
+            <div class="btn-row" style="margin-bottom: 25px;">
+                <button class="btn-save" onclick="saveFaq()">
+                    <i class="fas fa-save"></i> Guardar Pregunta
+                </button>
+                <button class="btn-outline-gray" onclick="cancelFaqEdit()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+            <div id="faq-container"></div>
+        </div>
+
+        <!-- ============ SOBRE NOSOTROS ============ -->
+        <div class="admin-card">
+            <h2 style="margin-bottom: 20px;">🎨 Personalizar Sección "Sobre Nosotros"</h2>
+            <p class="card-desc">Si no completás algún campo, se mantiene el texto actual del sitio.</p>
+
+            <div class="form-group">
+                <label>Subtítulo pequeño (Ej: "QUIÉNES SOMOS")</label>
+                <input type="text" id="content-subtitle" placeholder="QUIÉNES SOMOS">
+            </div>
+            <div class="form-group">
+                <label>Título grande</label>
+                <input type="text" id="content-title" placeholder="Vendemos tecnología, no promesas.">
+            </div>
+            <div class="form-group">
+                <label>Párrafo de descripción</label>
+                <textarea id="content-text" rows="3" placeholder="Somos un equipo local especializado en tecnología..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>📷 Imagen de la sección</label>
+                <img id="content-image-preview" src="" style="display:none; max-width: 220px; width: 100%; border-radius: 10px; margin-bottom: 10px;">
+                <input type="file" id="content-image-input" accept="image/*" style="display:none" onchange="handleContentImageSelect(this.files, 'content')">
+                <button type="button" class="btn-blue" onclick="document.getElementById('content-image-input').click()">
+                    <i class="fas fa-crop"></i> Elegir y recortar imagen
+                </button>
+            </div>
+
+            <div class="highlight-box">
+                <label>🥇 Feature destacada 1</label>
+                <input type="text" id="content-feature1-title" placeholder="Garantía oficial" style="margin-bottom: 10px;">
+                <input type="text" id="content-feature1-text" placeholder="Todos los productos con garantía y soporte post-venta.">
+            </div>
+            <div class="highlight-box">
+                <label>🥈 Feature destacada 2</label>
+                <input type="text" id="content-feature2-title" placeholder="Envíos a todo el país" style="margin-bottom: 10px;">
+                <input type="text" id="content-feature2-text" placeholder="Coordinamos entrega en Asunción e interior.">
+            </div>
+            <div class="highlight-box">
+                <label>🥉 Feature destacada 3</label>
+                <input type="text" id="content-feature3-title" placeholder="Pago flexible" style="margin-bottom: 10px;">
+                <input type="text" id="content-feature3-text" placeholder="Efectivo, transferencia y tarjetas.">
+            </div>
+            <div class="highlight-box">
+                <label>🏅 Feature destacada 4</label>
+                <input type="text" id="content-feature4-title" placeholder="Atención directa" style="margin-bottom: 10px;">
+                <input type="text" id="content-feature4-text" placeholder="Consultas por WhatsApp, respuesta en el día.">
+            </div>
+
+            <div class="form-group">
+                <label>📄 Texto del pie de página (footer, columna izquierda)</label>
+                <textarea id="content-footer-text" rows="3" placeholder="Tienda de tecnología con atención directa y envíos a todo el país."></textarea>
+            </div>
+
+            <button class="btn-save" onclick="saveContenido()">
+                <i class="fas fa-save"></i> Guardar Personalización
+            </button>
+        </div>
+
+        <!-- ============ CONTACTO Y REDES SOCIALES ============ -->
+        <div class="admin-card">
+            <h2 style="margin-bottom: 20px;">📞 Personalizar Contacto y Redes Sociales</h2>
+            <p class="card-desc">Afecta el footer, el botón flotante y la burbuja de WhatsApp del sitio.</p>
+
+            <div class="form-group">
+                <label>📱 WhatsApp (con código de país, sin +)</label>
+                <input type="text" id="footer-whatsapp" placeholder="Ej: 595994272727">
+            </div>
+            <div class="form-group">
+                <label>💬 Mensaje de bienvenida (burbuja de WhatsApp)</label>
+                <input type="text" id="footer-wa-message" placeholder="¡Hola! ¿En qué producto estás interesado?">
+            </div>
+            <div class="form-group">
+                <label>✉️ Email de contacto</label>
+                <input type="email" id="footer-email" placeholder="correo@techstore.com.py">
+            </div>
+            <div class="form-group">
+                <label>📍 Dirección / Ubicación</label>
+                <input type="text" id="footer-address" placeholder="Curuguaty, Canindeyú, Paraguay">
+            </div>
+
+            <div class="form-group">
+                <label>🌐 Redes Sociales</label>
+                <div id="social-rows-container"></div>
+                <button type="button" class="btn-outline-gray" style="width:auto; padding: 8px 16px;" onclick="addSocialRow()">
+                    <i class="fas fa-plus"></i> Agregar red social
+                </button>
+            </div>
+
+            <button class="btn-save" style="margin-top: 15px;" onclick="saveFooterContacto()">
+                <i class="fas fa-save"></i> Guardar Contacto y Redes
+            </button>
+        </div>
+
+        <!-- ============ PERSONALIZAR PORTADA (HERO) ============ -->
+        <div class="admin-card">
+            <h2 style="margin-bottom: 20px;">🖼️ Personalizar Portada Principal</h2>
+            <p class="card-desc">Es lo primero que ve la gente al entrar al sitio.</p>
+
+            <div class="form-group">
+                <label>Título grande de la portada</label>
+                <input type="text" id="hero-title" placeholder="Tecnología real, a precio real.">
+            </div>
+            <div class="form-group">
+                <label>Texto debajo del título</label>
+                <textarea id="hero-text" rows="2" placeholder="Notebooks, componentes, periféricos y celulares seleccionados por su relación calidad-precio."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>🖼️ Foto del producto destacado</label>
+                <img id="hero-image-preview" src="" style="display:none; max-width: 280px; width: 100%; border-radius: 10px; margin-bottom: 10px;">
+                <input type="file" id="hero-image-input" accept="image/*" style="display:none" onchange="handleContentImageSelect(this.files, 'hero')">
+                <button type="button" class="btn-blue" onclick="document.getElementById('hero-image-input').click()">
+                    <i class="fas fa-crop"></i> Elegir y recortar imagen
+                </button>
+            </div>
+
+            <button class="btn-save" onclick="saveHero()">
+                <i class="fas fa-save"></i> Guardar Portada
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ======================================================
+     MODAL DE RECORTE DE IMAGEN (cuadrícula + esquinas arrastrables)
+     ====================================================== -->
+<div class="crop-modal-overlay" id="crop-modal">
+    <div class="crop-modal-box">
+        <h3>Recortá tu imagen</h3>
+        <div id="crop-container">
+            <img id="crop-image" src="" draggable="false">
+            <div id="crop-rect">
+                <div class="crop-grid-line" style="left:33.333%; top:0; bottom:0; width:1px;"></div>
+                <div class="crop-grid-line" style="left:66.666%; top:0; bottom:0; width:1px;"></div>
+                <div class="crop-grid-line" style="top:33.333%; left:0; right:0; height:1px;"></div>
+                <div class="crop-grid-line" style="top:66.666%; left:0; right:0; height:1px;"></div>
+                <div class="crop-handle" data-corner="tl" style="top:-9px; left:-9px; border-top:4px solid #4CAF50; border-left:4px solid #4CAF50; cursor:nwse-resize;"></div>
+                <div class="crop-handle" data-corner="tr" style="top:-9px; right:-9px; border-top:4px solid #4CAF50; border-right:4px solid #4CAF50; cursor:nesw-resize;"></div>
+                <div class="crop-handle" data-corner="bl" style="bottom:-9px; left:-9px; border-bottom:4px solid #4CAF50; border-left:4px solid #4CAF50; cursor:nesw-resize;"></div>
+                <div class="crop-handle" data-corner="br" style="bottom:-9px; right:-9px; border-bottom:4px solid #4CAF50; border-right:4px solid #4CAF50; cursor:nwse-resize;"></div>
+            </div>
+        </div>
+        <p class="crop-hint">Arrastrá las esquinas verdes para ajustar el recorte, o el centro para moverlo</p>
+        <div class="btn-row" style="margin-top:12px;">
+            <button class="btn-outline-gray" onclick="cancelCrop()">Cancelar</button>
+            <button class="btn-save" onclick="confirmCrop()">Usar esta imagen</button>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================
+     MODAL DE CONFIRMACIÓN
+     ====================================================== -->
+<div class="confirm-modal-overlay" id="confirm-modal">
+    <div class="confirm-modal-box">
+        <div class="emoji">📝</div>
+        <h3>Tenés cambios sin guardar</h3>
+        <p id="confirm-modal-text">Si salís ahora, vas a perder los datos que escribiste. ¿Qué querés hacer?</p>
+        <div class="btn-row">
+            <button class="btn-outline-gray" onclick="closeConfirmModal()">Seguir editando</button>
+            <button id="confirm-modal-action-btn" style="flex:1; padding:12px; border:none; background:#f44336; color:white; border-radius:8px; font-weight:bold; cursor:pointer;">Salir igual</button>
+        </div>
+    </div>
+</div>
+
+<!-- Notificaciones tipo toast -->
+<div id="toast-container"></div>
+
+<script src="admin.js"></script>
+</body>
+</html>
