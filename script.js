@@ -131,13 +131,41 @@ const faqs = [
   { question: '¿Puedo retirar en el local?', answer: 'Sí, podés coordinar el retiro en nuestro local. Te compartimos la dirección exacta por WhatsApp al confirmar la compra.' }
 ];
 
+// Servicios: foto, título y descripción — 100% editable desde el admin
+const servicios = [
+  {
+    id: 's1',
+    title: 'Armado de PC a medida',
+    description: 'Te asesoramos y armamos tu computadora según tu uso y presupuesto, con garantía de armado.',
+    image: 'https://images.unsplash.com/photo-1515630278258-407f66498911?w=600&q=75&auto=format&fit=crop'
+  },
+  {
+    id: 's2',
+    title: 'Mantenimiento y limpieza',
+    description: 'Limpieza interna, cambio de pasta térmica y optimización para que tu equipo rinda como el primer día.',
+    image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=75&auto=format&fit=crop'
+  },
+  {
+    id: 's3',
+    title: 'Instalación de software',
+    description: 'Instalamos sistema operativo, drivers y programas esenciales, todo listo para usar.',
+    image: 'https://images.unsplash.com/photo-1756388371735-cc845c578200?w=600&q=75&auto=format&fit=crop'
+  },
+  {
+    id: 's4',
+    title: 'Soporte técnico',
+    description: 'Diagnóstico y solución de fallas de hardware o software, en el local o coordinando visita.',
+    image: 'https://images.unsplash.com/photo-1585816517178-2398c69d12c6?w=600&q=75&auto=format&fit=crop'
+  }
+];
+
 const categoryLabels = {
   notebooks: 'Notebooks', perifericos: 'Periféricos', componentes: 'Componentes',
   gaming: 'Gaming', celulares: 'Celulares', accesorios: 'Accesorios'
 };
 const badgeLabels = { oferta: 'Oferta', nuevo: 'Nuevo', destacado: 'Destacado' };
 
-const WHATSAPP_NUMBER = '595900000000';
+const WHATSAPP_NUMBER = '595991192212';
 
 let currentFilter = { category: 'todos', search: '', sort: '' };
 let currentModalProduct = null;
@@ -148,6 +176,7 @@ let currentSlideIndex = 0;
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
   renderProducts();
+  renderServices();
   renderFaqs();
   setupFilters();
   setupModal();
@@ -179,6 +208,37 @@ function getFilteredProducts() {
   return list;
 }
 
+// ============================================
+// RENDER DE SERVICIOS
+// ============================================
+function renderServices() {
+  const grid = document.getElementById('services-grid');
+  if (!grid) return;
+
+  if (!servicios.length) {
+    grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#666; padding:20px 0;">Todavía no cargamos servicios.</p>';
+    return;
+  }
+
+  grid.innerHTML = servicios.map(s => `
+    <div class="service-card fade-in-element visible">
+      <img src="${s.image}" alt="${s.title}">
+      <div class="service-info">
+        <h3>${s.title}</h3>
+        <p>${s.description}</p>
+        <button class="btn-whatsapp" onclick="consultarServicioWhatsapp('${s.title.replace(/'/g, "\\'")}')">
+          <i class="fab fa-whatsapp"></i> Consultar
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function consultarServicioWhatsapp(serviceName) {
+  const msg = encodeURIComponent(`Hola JAVÜ Store, quiero consultar por el servicio: ${serviceName}`);
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+}
+
 function renderProducts() {
   const grid = document.getElementById('products-grid');
   const list = getFilteredProducts();
@@ -208,7 +268,7 @@ function renderProducts() {
 }
 
 function consultarWhatsapp(productName) {
-  const msg = encodeURIComponent(`Hola TechStore, quiero consultar por: ${productName}`);
+  const msg = encodeURIComponent(`Hola JAVÜ Store, quiero consultar por: ${productName}`);
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
 }
 
@@ -290,7 +350,7 @@ function openProductModal(id) {
     `<div class="feature"><i class="fas fa-check-circle"></i> ${f}</div>`
   ).join('');
   document.getElementById('modal-whatsapp').href =
-    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola TechStore, quiero consultar por: ' + p.title)}`;
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola JAVÜ Store, quiero consultar por: ' + p.title)}`;
 
   renderSlide();
   renderDots();
@@ -488,7 +548,7 @@ function setupContactForm() {
     const message = document.getElementById('contact-message').value.trim();
 
     const text = encodeURIComponent(
-      `Hola TechStore, soy ${name} (tel: ${phone}). ${message}`
+      `Hola JAVÜ Store, soy ${name} (tel: ${phone}). ${message}`
     );
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
     form.reset();

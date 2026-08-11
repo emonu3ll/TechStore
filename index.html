@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TechStore | Notebooks, Componentes y Tecnología en Paraguay</title>
+    <title>JAVÜ Store | Tecnología, Accesorios y Gaming en Paraguay</title>
 
-    <meta name="description" content="Notebooks, componentes, periféricos, gaming y celulares en Paraguay. Atención directa por WhatsApp y envíos a todo el país.">
+    <meta name="description" content="Tecnología, accesorios y gaming en Paraguay. Atención directa por WhatsApp y envíos a todo el país.">
 
+    <link rel="icon" type="image/png" href="img/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,15 +18,16 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <div class="logo-icono">TS</div>
+                <img src="img/logo.png" alt="JAVÜ Store" class="logo-icono">
                 <div class="logo-texto">
-                    <span>TECH</span>
+                    <span>JAVÜ</span>
                     <span>STORE</span>
                 </div>
             </div>
 
-            <ul class="nav-links" id="nav-links">
+          <ul class="nav-links" id="nav-links">
                 <li><a href="#productos">Productos</a></li>
+                <li><a href="#servicios">Servicios</a></li>
                 <li><a href="#nosotros">Nosotros</a></li>
                 <li><a href="#preguntas-frecuentes">Preguntas</a></li>
                 <li><a href="#contacto">Contacto</a></li>
@@ -40,7 +42,7 @@
     <!-- SECCIÓN HERO CON BUSCADOR -->
     <section class="hero" id="hero-section">
         <div class="hero-content">
-            <h2>Tecnología real, a precio real</h2>
+            <h2>Tecnología · Accesorios · Gaming</h2>
             <div class="filter-panel">
                 <div class="search-box">
                     <input type="text" id="filter-search-input" placeholder="¿Qué producto estás buscando?">
@@ -74,7 +76,7 @@
         </div>
     </section>
 
-    <!-- PRODUCTOS DESTACADOS -->
+<!-- PRODUCTOS DESTACADOS -->
     <section class="products" id="productos">
         <div class="container">
             <h2>Productos Destacados</h2>
@@ -84,8 +86,18 @@
         </div>
     </section>
 
+    <!-- SERVICIOS -->
+    <section class="services" id="servicios">
+        <div class="container">
+            <h2>Nuestros Servicios</h2>
+            <div class="services-grid" id="services-grid">
+                <!-- El JavaScript llena esto automáticamente -->
+            </div>
+        </div>
+    </section>
+
     <!-- BOTÓN FLOTANTE DE WHATSAPP -->
-    <a href="https://wa.me/595900000000?text=Hola%20TechStore%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n." class="whatsapp-float" target="_blank">
+    <a href="https://wa.me/595991192212?text=Hola%20JAVÜ Store%2C%20quiero%20consultar%20sobre%20un%20producto." class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
@@ -93,9 +105,9 @@
     <div class="whatsapp-chat-bubble" id="whatsapp-chat-bubble">
         <button class="whatsapp-bubble-close" id="whatsapp-bubble-close" aria-label="Cerrar">&times;</button>
         <div class="whatsapp-bubble-header">
-            <div class="whatsapp-bubble-avatar">TS</div>
+            <div class="whatsapp-bubble-avatar">JV</div>
             <div>
-                <strong>TechStore</strong>
+                <strong>JAVÜ Store</strong>
                 <span class="whatsapp-bubble-status">● En línea</span>
             </div>
         </div>
@@ -108,7 +120,7 @@
                 <span class="whatsapp-bubble-time">Ahora</span>
             </div>
         </div>
-        <a href="https://wa.me/595900000000?text=Hola%20TechStore%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" class="whatsapp-bubble-btn">
+        <a href="https://wa.me/595991192212?text=Hola%20JAVÜ Store%2C%20quiero%20consultar%20sobre%20un%20producto." target="_blank" class="whatsapp-bubble-btn">
             <i class="fab fa-whatsapp"></i> Enviar mensaje
         </a>
     </div>
@@ -146,7 +158,7 @@
         <div class="container about-grid">
             <div class="about-content fade-in-element">
                 <h4 class="about-subtitle" id="about-subtitle">QUIÉNES SOMOS</h4>
-                <h2 class="about-title" id="about-title">TechStore</h2>
+                <h2 class="about-title" id="about-title">JAVÜ Store</h2>
                 <p class="about-text" id="about-text">
                     Somos un equipo local especializado en tecnología, con productos verificados y garantía real.
                     Te acompañamos desde la consulta hasta la entrega.
@@ -159,7 +171,7 @@
                 </ul>
             </div>
             <div class="about-image fade-in-element">
-                <img id="about-image" src="https://images.unsplash.com/photo-1761494296583-99b15e9063c5?w=600" alt="Equipo TechStore">
+                <img id="about-image" src="https://images.unsplash.com/photo-1761494296583-99b15e9063c5?w=600" alt="Equipo JAVÜ Store">
             </div>
         </div>
     </section>
@@ -171,7 +183,7 @@
             <h2 class="contact-title">Hablemos de tu próxima compra</h2>
             <div class="contact-grid">
                 <div class="contact-info-cards">
-                    <a href="https://wa.me/595900000000?text=Hola%20TechStore%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" class="contact-info-card">
+                    <a href="https://wa.me/595991192212?text=Hola%20JAVÜ Store%2C%20quiero%20consultar%20sobre%20un%20producto." target="_blank" class="contact-info-card">
                         <i class="fab fa-whatsapp" style="color: #25D366;"></i>
                         <div>
                             <p class="contact-info-label">WhatsApp</p>
@@ -223,13 +235,13 @@
     <footer class="footer">
         <div class="container footer-grid">
             <div class="footer-col">
-                <h3>TechStore</h3>
+                <h3>JAVÜ Store</h3>
                 <p id="footer-description">Tienda de tecnología: notebooks, componentes, periféricos, gaming y celulares, con atención directa y envíos a todo el país.</p>
             </div>
             <div class="footer-col">
                 <h3>Contacto</h3>
                 <ul id="footer-contact-list">
-                    <li id="footer-whatsapp-item"><i class="fab fa-whatsapp"></i> <a id="footer-whatsapp-link" href="https://wa.me/595900000000" target="_blank" style="color:inherit; text-decoration:none;">+595 9__ ___ ___</a></li>
+                    <li id="footer-whatsapp-item"><i class="fab fa-whatsapp"></i> <a id="footer-whatsapp-link" href="https://wa.me/595991192212" target="_blank" style="color:inherit; text-decoration:none;">+595 991 192 212</a></li>
                     <li id="footer-email-item"><i class="fas fa-envelope"></i> <span id="footer-email-text">correo@techstore.com.py</span></li>
                     <li id="footer-address-item"><i class="fas fa-map-marker-alt"></i> <span id="footer-address-text">Curuguaty, Canindeyú</span></li>
                 </ul>
@@ -255,7 +267,7 @@
 
         <div class="footer-bottom">
             <p style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 5px;">
-                &copy; 2026 TechStore. Todos los derechos reservados.
+                &copy; 2026 JAVÜ Store. Todos los derechos reservados.
                 <a href="admin.html" style="
                     display: inline-block;
                     font-size: 10px;

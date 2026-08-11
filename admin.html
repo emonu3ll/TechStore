@@ -356,10 +356,47 @@
             </div>
         </div>
 
-        <!-- ============ LISTA DE PRODUCTOS ============ -->
+<!-- ============ LISTA DE PRODUCTOS ============ -->
         <div class="admin-card">
             <h2 style="margin-bottom: 20px;">📋 Productos Publicados</h2>
             <div id="products-container"></div>
+        </div>
+
+        <!-- ============ SERVICIOS ============ -->
+        <div class="admin-card">
+            <h2>🛠️ Servicios</h2>
+            <p class="card-desc">Agregá, editá o eliminá los servicios que se muestran en el sitio, con su foto.</p>
+
+            <div class="drop-zone" id="service-drop-zone" onclick="document.getElementById('service-file-input').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Arrastrá una foto aquí o hacé clic para seleccionar</p>
+            </div>
+            <input type="file" id="service-file-input" accept="image/*" style="display: none;" onchange="handleServiceFiles(this.files)">
+
+            <div class="image-preview" id="service-image-preview"></div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Título del servicio</label>
+                <input type="text" id="service-title" placeholder="Ej: Armado de PC a medida">
+            </div>
+            <div class="form-group">
+                <label>Descripción</label>
+                <textarea id="service-description" rows="3" placeholder="Contá brevemente en qué consiste el servicio..."></textarea>
+            </div>
+
+            <input type="hidden" id="edit-service-id" value="">
+
+            <div class="btn-row">
+                <button class="btn-save" onclick="saveService()">
+                    <i class="fas fa-save"></i> Guardar Servicio
+                </button>
+                <button class="btn-outline-gray" onclick="cancelServiceEdit()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+
+            <h3 style="margin: 28px 0 14px; color: #1e3a5f; font-family: 'Cinzel', serif; font-size: 16px;">Servicios publicados</h3>
+            <div id="services-container"></div>
         </div>
 
         <!-- ============ FAQ ============ -->

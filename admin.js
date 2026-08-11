@@ -44,6 +44,11 @@ let faqs = [
 ];
 
 let currentImages = []; // fotos cargadas para el producto en edición (data URLs)
+let servicios = [
+  { id: 's1', title: 'Armado de PC a medida', description: 'Te asesoramos y armamos tu computadora según tu uso y presupuesto, con garantía de armado.', img: 'https://images.unsplash.com/photo-1515630278258-407f66498911?w=200&q=60&auto=format&fit=crop' },
+  { id: 's2', title: 'Mantenimiento y limpieza', description: 'Limpieza interna, cambio de pasta térmica y optimización de tu equipo.', img: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&q=60&auto=format&fit=crop' }
+];
+let currentServiceImage = null; // foto cargada para el servicio en edición (data URL)
 let hasUnsavedChanges = false;
 let pendingCropContext = null; // 'content' | 'hero' — a qué campo va la imagen recortada
 let pendingCropFile = null;
@@ -57,10 +62,12 @@ const categoryLabels = {
 
 document.addEventListener('DOMContentLoaded', () => {
   renderProducts();
+  renderServices();
   renderFaqs();
   addSocialRow(); // arranca con una fila de red social vacía
 
   setupDropZone();
+  setupServiceDropZone();
   setupCropDrag();
   trackUnsavedChanges();
 });
@@ -538,6 +545,125 @@ function showToast(text, type = 'default') {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 300);
   }, 3200);
+}
+
+// ============================================
+// SERVICIOS
+// ============================================
+function setupServiceDropZone() {
+  const dz = document.getElementById('service-drop-zone');
+  ['dragover', 'dragenter'].forEach(evt =>
+    dz.addEventListener(evt, (e) => { e.preventDefault(); dz.classList.add('dragover'); })
+  );
+  ['dragleave', 'drop'].forEach(evt =>
+    dz.addEventListener(evt, (e) => { e.preventDefault(); dz.classList.remove('dragover'); })
+  );
+  dz.addEventListener('drop', (e) => {
+    if (e.dataTransfer.files.length) handleServiceFiles(e.dataTransfer.files);
+  });
+}
+
+function handleServiceFiles(fileList) {
+  const file = fileList[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    currentServiceImage = e.target.result;
+    renderServiceImagePreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderServiceImagePreview() {
+  const wrap = document.getElementById('service-image-preview');
+  wrap.innerHTML = currentServiceImage ? `
+    <div class="img-wrap">
+      <img src="${currentServiceImage}" alt="Foto del servicio">
+      <button class="remove-img" onclick="removeServiceImage()" type="button">×</button>
+    </div>
+  ` : '';
+}
+
+function removeServiceImage() {
+  currentServiceImage = null;
+  renderServiceImagePreview();
+}
+
+function saveService() {
+  const title = document.getElementById('service-title').value.trim();
+  const description = document.getElementById('service-description').value.trim();
+  if (!title || !description) {
+    showToast('Completá el título y la descripción del servicio.', 'error');
+    return;
+  }
+
+  const editId = document.getElementById('edit-service-id').value;
+  const data = {
+    title,
+    description,
+    img: currentServiceImage || 'https://images.unsplash.com/photo-1515630278258-407f66498911?w=200&q=60&auto=format&fit=crop'
+  };
+
+  if (editId) {
+    const idx = servicios.findIndex(s => s.id === editId);
+    if (idx > -1) servicios[idx] = { ...servicios[idx], ...data };
+    showToast('Servicio actualizado.', 'success');
+  } else {
+    servicios.push({ id: 's' + Date.now(), ...data });
+    showToast('Servicio guardado.', 'success');
+  }
+
+  cancelServiceEdit();
+  renderServices();
+  hasUnsavedChanges = false;
+}
+
+function cancelServiceEdit() {
+  document.getElementById('service-title').value = '';
+  document.getElementById('service-description').value = '';
+  document.getElementById('edit-service-id').value = '';
+  currentServiceImage = null;
+  renderServiceImagePreview();
+}
+
+function editService(id) {
+  const s = servicios.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('edit-service-id').value = s.id;
+  document.getElementById('service-title').value = s.title;
+  document.getElementById('service-description').value = s.description;
+  currentServiceImage = s.img;
+  renderServiceImagePreview();
+  document.querySelector('.admin-content').scrollIntoView({ behavior: 'smooth' });
+}
+
+function deleteService(id) {
+  openConfirmModal('¿Seguro que querés eliminar este servicio?', () => {
+    servicios = servicios.filter(s => s.id !== id);
+    renderServices();
+    showToast('Servicio eliminado.', 'success');
+  }, 'Eliminar');
+}
+
+function renderServices() {
+  const container = document.getElementById('services-container');
+  if (!servicios.length) {
+    container.innerHTML = '<p style="color:#999; text-align:center; padding: 20px;">Todavía no hay servicios cargados.</p>';
+    return;
+  }
+  container.innerHTML = servicios.map(s => `
+    <div class="product-item">
+      <img src="${s.img}" alt="${s.title}">
+      <div class="product-item-info">
+        <h3>${s.title}</h3>
+        <p class="meta">${s.description}</p>
+      </div>
+      <div class="product-item-actions">
+        <button class="icon-btn edit" onclick="editService('${s.id}')" aria-label="Editar"><i class="fas fa-pen"></i></button>
+        <button class="icon-btn delete" onclick="deleteService('${s.id}')" aria-label="Eliminar"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  `).join('');
 }
 
 // ============================================
