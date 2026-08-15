@@ -4,28 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>JAVÜ Store | Tecnología, Accesorios y Gaming en Paraguay</title>
-
     <meta name="description" content="Tecnología, accesorios y gaming en Paraguay. Atención directa por WhatsApp y envíos a todo el país.">
 
     <link rel="icon" type="image/png" href="img/logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<!-- BARRA DE NAVEGACIÓN -->
+    <!-- BARRA DE NAVEGACIÓN -->
     <nav class="navbar">
-        <div class="container">
-            <div class="logo">
+        <div class="container navbar-inner">
+            <a href="#" class="logo">
                 <img src="img/logo.png" alt="JAVÜ Store" class="logo-icono">
-                <div class="logo-texto">
-                    <span>JAVÜ</span>
-                    <span>STORE</span>
-                </div>
-            </div>
+                <span class="logo-texto">JAVÜ<span class="dot">Store</span></span>
+            </a>
 
-          <ul class="nav-links" id="nav-links">
+            <ul class="nav-links" id="nav-links">
                 <li><a href="#productos">Productos</a></li>
                 <li><a href="#servicios">Servicios</a></li>
                 <li><a href="#nosotros">Nosotros</a></li>
@@ -33,17 +30,27 @@
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
 
-            <button class="menu-toggle" id="menu-toggle">
+            <a href="https://wa.me/595991192212" class="nav-cta" target="_blank">
+                <i class="fab fa-whatsapp"></i> Escribinos
+            </a>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
     </nav>
 
-    <!-- SECCIÓN HERO CON BUSCADOR -->
+    <!-- SECCIÓN HERO -->
     <section class="hero" id="hero-section">
-        <div class="hero-content">
-            <h2>Tecnología · Accesorios · Gaming</h2>
-<div class="filter-panel">
+        <div class="hero-blob hero-blob-a" aria-hidden="true"></div>
+        <div class="hero-blob hero-blob-b" aria-hidden="true"></div>
+
+        <div class="container hero-inner">
+            <div class="hero-copy fade-in-element visible">
+                <span class="eyebrow">Tecnología · Accesorios · Gaming</span>
+                <h1>Todo lo que buscás,<br>en <span class="grad-word">un solo lugar.</span></h1>
+                <p class="hero-lead">Notebooks, componentes, periféricos y celulares con atención directa por WhatsApp. Sin vueltas, sin letra chica.</p>
+
                 <div class="search-box">
                     <input type="text" id="filter-search-input" placeholder="¿Qué producto estás buscando?">
                     <select id="filter-categoria" class="search-cat-select">
@@ -55,55 +62,24 @@
                         <option value="celulares">📱 Celulares</option>
                         <option value="accesorios">🔌 Accesorios</option>
                     </select>
-                    <button class="search-btn" id="filter-search-btn"><i class="fas fa-search"></i></button>
+                    <button class="search-btn" id="filter-search-btn" aria-label="Buscar"><i class="fas fa-search"></i></button>
                 </div>
-                <div class="filter-selects">
+
+                <div class="hero-secondary-row">
                     <select id="filter-price-sort">
                         <option value="">Ordenar por precio</option>
                         <option value="asc">Precio: Menor a mayor</option>
                         <option value="desc">Precio: Mayor a menor</option>
                     </select>
+                    <div class="quick-categories" id="quick-categories">
+                        <button class="quick-cat-btn active" data-cat="todos">Todos</button>
+                        <button class="quick-cat-btn" data-cat="notebooks">Notebooks</button>
+                        <button class="quick-cat-btn" data-cat="perifericos">Periféricos</button>
+                        <button class="quick-cat-btn" data-cat="componentes">Componentes</button>
+                        <button class="quick-cat-btn" data-cat="gaming">Gaming</button>
+                        <button class="quick-cat-btn" data-cat="celulares">Celulares</button>
+                    </div>
                 </div>
-            </div>
-            <div class="quick-categories" id="quick-categories">
-                <button class="quick-cat-btn active" data-cat="todos">Todos</button>
-                <button class="quick-cat-btn" data-cat="notebooks">Notebooks</button>
-                <button class="quick-cat-btn" data-cat="perifericos">Periféricos</button>
-                <button class="quick-cat-btn" data-cat="componentes">Componentes</button>
-                <button class="quick-cat-btn" data-cat="gaming">Gaming</button>
-                <button class="quick-cat-btn" data-cat="celulares">Celulares</button>
-            </div>
-        </div>
-    </section>
-
-<!-- PRODUCTOS DESTACADOS -->
-    <section class="products" id="productos">
-        <div class="container">
-            <div class="featured-deal" id="featured-deal">
-                <!-- El JavaScript llena esto automáticamente -->
-            </div>
-
-            <h2>Productos Destacados</h2>
-
-            <div class="product-tabs" id="product-tabs">
-                <button class="tab-btn active" data-tab="todos">Todos</button>
-                <button class="tab-btn" data-tab="destacado">Destacados</button>
-                <button class="tab-btn" data-tab="oferta">Ofertas</button>
-                <button class="tab-btn" data-tab="nuevo">Nuevos</button>
-            </div>
-
-            <div class="products-grid" id="products-grid">
-                <!-- El JavaScript llena esto automáticamente -->
-            </div>
-        </div>
-    </section>
-
-    <!-- SERVICIOS -->
-    <section class="services" id="servicios">
-        <div class="container">
-            <h2>Nuestros Servicios</h2>
-            <div class="services-grid" id="services-grid">
-                <!-- El JavaScript llena esto automáticamente -->
             </div>
         </div>
     </section>
@@ -165,12 +141,58 @@
         })();
     </script>
 
+    <!-- PRODUCTOS DESTACADOS -->
+    <section class="products" id="productos">
+        <div class="container">
+
+            <div class="featured-deal" id="featured-deal">
+                <!-- El JavaScript llena esto automáticamente -->
+            </div>
+
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">Catálogo</span>
+                    <h2>Productos destacados</h2>
+                </div>
+                <div class="product-tabs" id="product-tabs">
+                    <button class="tab-btn active" data-tab="todos">Todos</button>
+                    <button class="tab-btn" data-tab="destacado">Destacados</button>
+                    <button class="tab-btn" data-tab="oferta">Ofertas</button>
+                    <button class="tab-btn" data-tab="nuevo">Nuevos</button>
+                </div>
+            </div>
+
+            <div class="products-grid" id="products-grid">
+                <!-- El JavaScript llena esto automáticamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="services" id="servicios">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">Más allá de la venta</span>
+                    <h2>Servicios</h2>
+                </div>
+                <p class="section-note">Armado, mantenimiento y soporte — coordinado directo por WhatsApp.</p>
+            </div>
+            <div class="services-grid" id="services-grid">
+                <!-- El JavaScript llena esto automáticamente -->
+            </div>
+        </div>
+    </section>
+
     <!-- SECCIÓN SOBRE NOSOTROS -->
     <section class="about-us" id="nosotros">
         <div class="container about-grid">
+            <div class="about-image fade-in-element">
+                <img id="about-image" src="https://images.unsplash.com/photo-1761494296583-99b15e9063c5?w=600" alt="Equipo JAVÜ Store">
+            </div>
             <div class="about-content fade-in-element">
-                <h4 class="about-subtitle" id="about-subtitle">QUIÉNES SOMOS</h4>
-                <h2 class="about-title" id="about-title">JAVÜ Store</h2>
+                <span class="eyebrow" id="about-subtitle">Quiénes somos</span>
+                <h2 class="about-title" id="about-title">Vendemos tecnología,<br>no promesas.</h2>
                 <p class="about-text" id="about-text">
                     Somos un equipo local especializado en tecnología, con productos verificados y garantía real.
                     Te acompañamos desde la consulta hasta la entrega.
@@ -182,17 +204,29 @@
                     <li><i class="fab fa-whatsapp"></i><span><strong id="about-feature4-title">Atención directa:</strong> <span id="about-feature4-text">Consultas por WhatsApp, respuesta en el día.</span></span></li>
                 </ul>
             </div>
-            <div class="about-image fade-in-element">
-                <img id="about-image" src="https://images.unsplash.com/photo-1761494296583-99b15e9063c5?w=600" alt="Equipo JAVÜ Store">
+        </div>
+    </section>
+
+    <!-- CTA WHATSAPP -->
+    <section class="cta-strip">
+        <div class="container cta-strip-inner">
+            <div>
+                <h2>¿Ya sabés qué producto buscás?</h2>
+                <p>Escribinos y te respondemos en el día.</p>
             </div>
+            <a href="https://wa.me/595991192212" class="btn-cta-white" target="_blank">
+                <i class="fab fa-whatsapp"></i> +595 991 192 212
+            </a>
         </div>
     </section>
 
     <!-- SECCIÓN DE CONTACTO -->
     <section class="contact-section" id="contacto">
         <div class="container">
-            <p class="contact-subtitle">CONTACTO</p>
-            <h2 class="contact-title">Hablemos de tu próxima compra</h2>
+            <div class="section-head center">
+                <span class="eyebrow">Contacto</span>
+                <h2>Hablemos de tu próxima compra</h2>
+            </div>
             <div class="contact-grid">
                 <div class="contact-info-cards">
                     <a href="https://wa.me/595991192212?text=Hola%20JAVÜ Store%2C%20quiero%20consultar%20sobre%20un%20producto." target="_blank" class="contact-info-card">
@@ -203,14 +237,14 @@
                         </div>
                     </a>
                     <a href="mailto:correo@techstore.com.py" class="contact-info-card">
-                        <i class="fas fa-envelope" style="color: #4CAF50;"></i>
+                        <i class="fas fa-envelope" style="color: #8A54FD;"></i>
                         <div>
                             <p class="contact-info-label">Email</p>
                             <p class="contact-info-value" id="footer-email-value">correo@techstore.com.py</p>
                         </div>
                     </a>
                     <div class="contact-info-card">
-                        <i class="fas fa-map-marker-alt" style="color: #E65100;"></i>
+                        <i class="fas fa-map-marker-alt" style="color: #17B8AC;"></i>
                         <div>
                             <p class="contact-info-label">Ubicación</p>
                             <p class="contact-info-value" id="footer-address-value">Curuguaty, Canindeyú</p>
@@ -235,8 +269,10 @@
     <!-- SECCIÓN DE PREGUNTAS FRECUENTES -->
     <section class="faq-section" id="preguntas-frecuentes">
         <div class="container">
-            <p class="faq-subtitle">PREGUNTAS FRECUENTES</p>
-            <h2 class="faq-title">Todo lo que necesitás saber</h2>
+            <div class="section-head">
+                <span class="eyebrow">Preguntas frecuentes</span>
+                <h2>Todo lo que necesitás saber</h2>
+            </div>
             <div class="faq-list" id="faq-list">
                 <!-- El JavaScript llena esto automáticamente -->
             </div>
@@ -246,29 +282,32 @@
     <!-- PIE DE PÁGINA (FOOTER) -->
     <footer class="footer">
         <div class="container footer-grid">
-            <div class="footer-col">
-                <h3>JAVÜ Store</h3>
+            <div class="footer-col footer-brand">
+                <div class="logo">
+                    <img src="img/logo.png" alt="JAVÜ Store" class="logo-icono">
+                    <span class="logo-texto">JAVÜ<span class="dot">Store</span></span>
+                </div>
                 <p id="footer-description">Tienda de tecnología: notebooks, componentes, periféricos, gaming y celulares, con atención directa y envíos a todo el país.</p>
             </div>
             <div class="footer-col">
-                <h3>Contacto</h3>
+                <h5>Contacto</h5>
                 <ul id="footer-contact-list">
-                    <li id="footer-whatsapp-item"><i class="fab fa-whatsapp"></i> <a id="footer-whatsapp-link" href="https://wa.me/595991192212" target="_blank" style="color:inherit; text-decoration:none;">+595 991 192 212</a></li>
+                    <li id="footer-whatsapp-item"><i class="fab fa-whatsapp"></i> <a id="footer-whatsapp-link" href="https://wa.me/595991192212" target="_blank">+595 991 192 212</a></li>
                     <li id="footer-email-item"><i class="fas fa-envelope"></i> <span id="footer-email-text">correo@techstore.com.py</span></li>
                     <li id="footer-address-item"><i class="fas fa-map-marker-alt"></i> <span id="footer-address-text">Curuguaty, Canindeyú</span></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h3>Enlaces Rápidos</h3>
+                <h5>Enlaces rápidos</h5>
                 <ul>
                     <li><a href="#productos">Productos</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
                     <li><a href="#nosotros">Nosotros</a></li>
-                    <li><a href="#preguntas-frecuentes">Preguntas</a></li>
                     <li><a href="#contacto">Contacto</a></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h3>Síguenos</h3>
+                <h5>Síguenos</h5>
                 <div class="social-links" id="footer-social-links">
                     <a href="#" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     <a href="#" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -278,18 +317,9 @@
         </div>
 
         <div class="footer-bottom">
-            <p style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 5px;">
-                &copy; 2026 JAVÜ Store. Todos los derechos reservados.
-                <a href="admin.html" style="
-                    display: inline-block;
-                    font-size: 10px;
-                    color: rgba(255,255,255,0.3);
-                    text-decoration: none;
-                    transition: color 0.3s;
-                " onmouseover="this.style.color='rgba(255,255,255,0.8)';"
-                   onmouseout="this.style.color='rgba(255,255,255,0.3)';">
-                    • Admin
-                </a>
+            <p>
+                © 2026 JAVÜ Store. Todos los derechos reservados.
+                <a href="admin.html" class="admin-link">• Admin</a>
             </p>
         </div>
     </footer>
@@ -319,7 +349,7 @@
         </div>
     </div>
 
-    <!-- LIGHTBOX DE IMÁGENES CON ZOOM Y DESLIZAR -->
+    <!-- LIGHTBOX DE IMÁGENES -->
     <div class="image-lightbox" id="image-lightbox">
         <button class="lightbox-close" id="lightbox-close">&times;</button>
         <button class="lightbox-nav lightbox-prev" id="lightbox-prev">&#10094;</button>
@@ -332,14 +362,10 @@
     </div>
 
     <!-- BANNER DE COOKIES -->
-    <div id="cookie-banner" style="display:none; position:fixed; bottom:0; left:0; width:100%; background:#1e3a5f; color:white; padding:16px 20px; z-index:9998; box-shadow: 0 -2px 10px rgba(0,0,0,0.2);">
-        <div style="max-width:1000px; margin:0 auto; display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
-            <p style="margin:0; flex:1; min-width:250px; font-size:14px;">
-                🍪 Usamos cookies para mejorar tu experiencia y entender cómo usás el sitio. Al continuar, aceptás su uso.
-            </p>
-            <button onclick="acceptCookies()" style="background:#4CAF50; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold; white-space:nowrap;">
-                Aceptar
-            </button>
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="container cookie-banner-inner">
+            <p>🍪 Usamos cookies para mejorar tu experiencia y entender cómo usás el sitio. Al continuar, aceptás su uso.</p>
+            <button onclick="acceptCookies()" class="btn-cookie-accept">Aceptar</button>
         </div>
     </div>
 
@@ -348,15 +374,14 @@
     <script>
         function acceptCookies() {
             localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookie-banner').style.display = 'none';
+            document.getElementById('cookie-banner').classList.remove('show');
         }
         window.addEventListener('DOMContentLoaded', () => {
             if (!localStorage.getItem('cookiesAccepted')) {
-                document.getElementById('cookie-banner').style.display = 'block';
+                document.getElementById('cookie-banner').classList.add('show');
             }
         });
 
-        // Menú mobile
         const menuToggle = document.getElementById('menu-toggle');
         const navLinks = document.getElementById('nav-links');
         menuToggle.addEventListener('click', () => {
@@ -368,7 +393,6 @@
             navLinks.classList.remove('active');
         }));
 
-        // Atajo de teclado alternativo para Admin (Alt + Shift + A)
         document.addEventListener('keydown', (e) => {
             if (e.altKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
                 window.location.href = 'admin.html';
