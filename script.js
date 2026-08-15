@@ -114,7 +114,7 @@ const productos = [
       'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=700&q=75&auto=format&fit=crop'
     ]
   },
-  {
+{
     id: 'p8',
     title: 'SSD NVMe 1TB Gen4',
     category: 'componentes',
@@ -125,9 +125,10 @@ const productos = [
     description: 'Disco SSD NVMe de 1TB con interfaz Gen4, velocidades de lectura y escritura muy superiores a un disco tradicional.',
     features: ['1TB', 'NVMe Gen4', 'Lectura 7000MB/s', '5 años de garantía'],
     images: [
-      'https://images.unsplash.com/photo-1515630278258-407f66498911?w=700&q=75&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1601737487795-dab272f52420?w=700&q=75&auto=format&fit=crop'
     ]
   }
+  
 ];
 
 const faqs = [
