@@ -14,6 +14,10 @@ const productos = [
     title: 'Notebook 15.6" Ryzen 5 · 16GB · 512GB SSD',
     category: 'notebooks',
     priceGs: 6490000,
+    oldPriceGs: null,
+    featured: true,
+    stockAvailable: 6,
+    stockInterest: 28,
     sku: 'SKU-0192',
     badge: 'nuevo',
     status: 'ok',
@@ -38,11 +42,13 @@ const productos = [
       'https://images.unsplash.com/photo-1756388371735-cc845c578200?w=700&q=75&auto=format&fit=crop'
     ]
   },
-  {
+{
     id: 'p3',
     title: 'Placa de video 8GB GDDR6',
     category: 'componentes',
     priceGs: 3150000,
+    oldPriceGs: 3690000,
+    featured: false,
     sku: 'SKU-0304',
     badge: 'oferta',
     status: 'low',
@@ -167,7 +173,7 @@ const badgeLabels = { oferta: 'Oferta', nuevo: 'Nuevo', destacado: 'Destacado' }
 
 const WHATSAPP_NUMBER = '595991192212';
 
-let currentFilter = { category: 'todos', search: '', sort: '' };
+let currentFilter = { category: 'todos', search: '', sort: '', tab: 'todos' };
 let currentModalProduct = null;
 let currentSlideIndex = 0;
 
@@ -175,10 +181,12 @@ let currentSlideIndex = 0;
 // INICIALIZACIÓN
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
+  renderFeaturedDeal();
   renderProducts();
   renderServices();
   renderFaqs();
   setupFilters();
+  setupProductTabs();
   setupModal();
   setupLightbox();
   setupScrollReveal();
@@ -198,6 +206,9 @@ function getFilteredProducts() {
   if (currentFilter.category !== 'todos') {
     list = list.filter(p => p.category === currentFilter.category);
   }
+  if (currentFilter.tab !== 'todos') {
+    list = list.filter(p => p.badge === currentFilter.tab);
+  }
   if (currentFilter.search) {
     const q = currentFilter.search.toLowerCase();
     list = list.filter(p => p.title.toLowerCase().includes(q));
@@ -206,6 +217,55 @@ function getFilteredProducts() {
   if (currentFilter.sort === 'desc') list.sort((a, b) => b.priceGs - a.priceGs);
 
   return list;
+}
+
+// ============================================
+// PANEL DE OFERTA DESTACADA
+// ============================================
+function renderFeaturedDeal() {
+  const wrap = document.getElementById('featured-deal');
+  if (!wrap) return;
+
+  const featured = productos.find(p => p.featured) || productos[0];
+  if (!featured) { wrap.style.display = 'none'; return; }
+
+  const available = featured.stockAvailable ?? 5;
+  const interest = featured.stockInterest ?? 20;
+  const pct = Math.min(100, Math.round((interest / (available + interest)) * 100));
+
+  wrap.innerHTML = `
+    <img class="featured-deal-img" src="${featured.images[0]}" alt="${featured.title}">
+    <div>
+      <div class="featured-deal-label">⚡ Oferta destacada</div>
+      <div class="featured-deal-name">${featured.title}</div>
+      <div class="featured-deal-prices">
+        ${featured.oldPriceGs ? `<span class="featured-deal-oldprice">${formatGs(featured.oldPriceGs)}</span>` : ''}
+        <span class="featured-deal-price">${formatGs(featured.priceGs)}</span>
+      </div>
+      <div class="stock-bar-wrap">
+        <div class="stock-bar-labels"><span>Disponibles: ${available}</span><span>Consultados: ${interest}</span></div>
+        <div class="stock-bar"><div class="stock-bar-fill" style="width:${pct}%"></div></div>
+      </div>
+      <button class="btn-whatsapp" style="width:auto; padding:12px 24px;" onclick="consultarWhatsapp('${featured.title.replace(/'/g, "\\'")}')">
+        <i class="fab fa-whatsapp"></i> Consultar esta oferta
+      </button>
+    </div>
+  `;
+}
+
+// ============================================
+// PESTAÑAS DE FILTRO (Todos / Destacados / Ofertas / Nuevos)
+// ============================================
+function setupProductTabs() {
+  const tabs = document.querySelectorAll('.tab-btn');
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter.tab = btn.dataset.tab;
+      renderProducts();
+    });
+  });
 }
 
 // ============================================
@@ -254,7 +314,10 @@ function renderProducts() {
         ${p.badge ? `<span class="product-badge badge-${p.badge}">${badgeLabels[p.badge]}</span>` : ''}
         <img src="${p.images[0]}" alt="${p.title}">
       </div>
-      <div class="product-price">${formatGs(p.priceGs)}</div>
+     <div class="product-price">
+        ${p.oldPriceGs ? `<span style="text-decoration:line-through; opacity:0.75; font-size:0.8em; margin-right:6px;">${formatGs(p.oldPriceGs)}</span>` : ''}
+        ${formatGs(p.priceGs)}
+      </div>
       <div class="product-info">
         <div class="product-cat">${categoryLabels[p.category] || p.category}</div>
         <h3>${p.title}</h3>

@@ -14,6 +14,17 @@
 </head>
 <body>
 
+    <!-- BARRA SUPERIOR DE CONTACTO -->
+    <div class="topbar">
+        <div class="container topbar-inner">
+            <div class="topbar-contact">
+                <a href="tel:+595991192212"><i class="fas fa-phone"></i> +595 991 192 212</a>
+                <a href="mailto:correo@techstore.com.py"><i class="fas fa-envelope"></i> correo@techstore.com.py</a>
+            </div>
+            <div class="topbar-note">🚚 Envíos a todo Paraguay</div>
+        </div>
+    </div>
+
     <!-- BARRA DE NAVEGACIÓN -->
     <nav class="navbar">
         <div class="container">
@@ -43,13 +54,10 @@
     <section class="hero" id="hero-section">
         <div class="hero-content">
             <h2>Tecnología · Accesorios · Gaming</h2>
-            <div class="filter-panel">
+<div class="filter-panel">
                 <div class="search-box">
                     <input type="text" id="filter-search-input" placeholder="¿Qué producto estás buscando?">
-                    <button class="search-btn" id="filter-search-btn"><i class="fas fa-search"></i></button>
-                </div>
-                <div class="filter-selects">
-                    <select id="filter-categoria">
+                    <select id="filter-categoria" class="search-cat-select">
                         <option value="todos">Todas las categorías</option>
                         <option value="notebooks">💻 Notebooks</option>
                         <option value="perifericos">⌨️ Periféricos</option>
@@ -58,6 +66,9 @@
                         <option value="celulares">📱 Celulares</option>
                         <option value="accesorios">🔌 Accesorios</option>
                     </select>
+                    <button class="search-btn" id="filter-search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="filter-selects">
                     <select id="filter-price-sort">
                         <option value="">Ordenar por precio</option>
                         <option value="asc">Precio: Menor a mayor</option>
@@ -79,7 +90,19 @@
 <!-- PRODUCTOS DESTACADOS -->
     <section class="products" id="productos">
         <div class="container">
+            <div class="featured-deal" id="featured-deal">
+                <!-- El JavaScript llena esto automáticamente -->
+            </div>
+
             <h2>Productos Destacados</h2>
+
+            <div class="product-tabs" id="product-tabs">
+                <button class="tab-btn active" data-tab="todos">Todos</button>
+                <button class="tab-btn" data-tab="destacado">Destacados</button>
+                <button class="tab-btn" data-tab="oferta">Ofertas</button>
+                <button class="tab-btn" data-tab="nuevo">Nuevos</button>
+            </div>
+
             <div class="products-grid" id="products-grid">
                 <!-- El JavaScript llena esto automáticamente -->
             </div>

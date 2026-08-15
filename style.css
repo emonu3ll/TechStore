@@ -24,6 +24,31 @@ html, body {
 }
 
 /* =========================================
+   1.5 BARRA SUPERIOR DE CONTACTO
+   ========================================= */
+.topbar {
+    background: #15121F;
+    color: rgba(255,255,255,0.85);
+    font-size: 12.5px;
+    padding: 8px 0;
+}
+.topbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.topbar-contact { display: flex; gap: 20px; }
+.topbar-contact a { display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s; }
+.topbar-contact a:hover { color: #5DDFE7; }
+.topbar-note { opacity: 0.8; }
+@media (max-width: 600px) {
+    .topbar-note { display: none; }
+    .topbar-contact { gap: 14px; }
+}
+
+/* =========================================
    2. BARRA DE NAVEGACIÓN Y LOGO
    ========================================= */
 .navbar {
@@ -172,6 +197,24 @@ html, body {
     padding: 15px 25px;
     font-size: 16px;
     outline: none;
+    min-width: 0;
+}
+
+.search-cat-select {
+    border: none;
+    border-left: 1px solid #e0e0e0;
+    background: white;
+    color: #5B3AC4;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 0 14px;
+    height: 100%;
+    max-width: 160px;
+    cursor: pointer;
+    outline: none;
+}
+@media (max-width: 600px) {
+    .search-cat-select { display: none; }
 }
 
 .search-btn {
@@ -258,9 +301,73 @@ html, body {
     text-align: center;
     font-size: 32px;
     color: #5B3AC4;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
     font-family: 'Sora', sans-serif;
 }
+
+/* Panel de oferta destacada */
+.featured-deal {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 28px;
+    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 30px;
+    align-items: center;
+}
+.featured-deal-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    background: #f5f5f5;
+    border-radius: 12px;
+}
+.featured-deal-label {
+    font-family: 'Sora', sans-serif;
+    color: #5B3AC4;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+}
+.featured-deal-name { font-size: 22px; font-weight: 700; margin-bottom: 10px; color: #15121F; }
+.featured-deal-prices { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
+.featured-deal-price { font-size: 26px; font-weight: 700; color: #17B8AC; }
+.featured-deal-oldprice { font-size: 16px; color: #999; text-decoration: line-through; }
+.stock-bar-wrap { max-width: 340px; margin-bottom: 16px; }
+.stock-bar-labels { display: flex; justify-content: space-between; font-size: 12.5px; color: #666; margin-bottom: 6px; }
+.stock-bar { height: 8px; background: #eee; border-radius: 999px; overflow: hidden; }
+.stock-bar-fill { height: 100%; background: linear-gradient(90deg, #8A54FD, #5DDFE7); border-radius: 999px; }
+
+@media (max-width: 700px) {
+    .featured-deal { grid-template-columns: 1fr; text-align: center; }
+    .featured-deal-prices, .stock-bar-labels { justify-content: center; }
+    .stock-bar-wrap { margin-left: auto; margin-right: auto; }
+}
+
+/* Pestañas de filtro sobre la grilla */
+.product-tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+.tab-btn {
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: 1px solid #ddd;
+    background: white;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #666;
+    transition: all 0.2s;
+}
+.tab-btn:hover { border-color: #5B3AC4; color: #5B3AC4; }
+.tab-btn.active { background: #5B3AC4; border-color: #5B3AC4; color: white; }
 
 .products-grid {
     display: grid;
