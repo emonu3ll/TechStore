@@ -325,9 +325,11 @@
     </footer>
 
     <!-- MODAL DE DETALLE DE PRODUCTO -->
-    <div class="product-modal" id="product-modal">
+<div class="product-modal" id="product-modal">
         <div class="modal-content">
+            <div class="shared-banner" id="shared-product-banner">💜 Alguien te compartió este producto</div>
             <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+            <button class="modal-share-btn" onclick="shareProduct(currentModalProduct.id)" aria-label="Compartir"><i class="fas fa-share-alt"></i></button>
             <div class="modal-info">
                 <div class="modal-image-slider">
                     <button class="slider-btn prev" onclick="changeSlide(-1)">&#10094;</button>

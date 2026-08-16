@@ -192,7 +192,40 @@ document.addEventListener('DOMContentLoaded', () => {
   setupLightbox();
   setupScrollReveal();
   setupContactForm();
+  checkSharedProduct();
 });
+
+// ============================================
+// COMPARTIR PRODUCTO
+// ============================================
+let cameFromSharedLink = false;
+
+function shareProduct(id) {
+  const p = productos.find(x => x.id === id);
+  if (!p) return;
+  const url = `${location.origin}${location.pathname}?producto=${id}`;
+  const shareData = {
+    title: p.title,
+    text: `Mirá este producto en JAVÜ Store: ${p.title} — ${formatGs(p.priceGs)}`,
+    url
+  };
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => {
+      alert('Enlace copiado. Pegalo donde quieras compartirlo (WhatsApp, etc.).');
+    });
+  }
+}
+
+function checkSharedProduct() {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('producto');
+  if (id && productos.find(p => p.id === id)) {
+    cameFromSharedLink = true;
+    openProductModal(id);
+  }
+}
 
 // ============================================
 // RENDER DE PRODUCTOS
@@ -310,9 +343,10 @@ function renderProducts() {
   }
 
   grid.innerHTML = list.map(p => `
-    <div class="product-card fade-in-element visible" onclick="openProductModal('${p.id}')">
+<div class="product-card fade-in-element visible" onclick="openProductModal('${p.id}')">
       <div class="product-image-wrapper">
         ${p.badge ? `<span class="product-badge badge-${p.badge}">${badgeLabels[p.badge]}</span>` : ''}
+        <button class="share-btn" onclick="event.stopPropagation(); shareProduct('${p.id}')" aria-label="Compartir"><i class="fas fa-share-alt"></i></button>
         <img src="${p.images[0]}" alt="${p.title}">
       </div>
      <div class="product-price">
@@ -405,6 +439,10 @@ function openProductModal(id) {
   if (!p) return;
   currentModalProduct = p;
   currentSlideIndex = 0;
+
+  const sharedBanner = document.getElementById('shared-product-banner');
+  if (sharedBanner) sharedBanner.classList.toggle('show', cameFromSharedLink);
+  cameFromSharedLink = false;
 
   document.getElementById('modal-price').textContent = formatGs(p.priceGs);
   document.getElementById('modal-title').textContent = p.title;
