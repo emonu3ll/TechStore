@@ -51,9 +51,13 @@
                 <h1>Todo lo que buscás,<br>en <span class="grad-word">un solo lugar.</span></h1>
                 <p class="hero-lead">Notebooks, componentes, periféricos y celulares con atención directa por WhatsApp. Sin vueltas, sin letra chica.</p>
 
-                <div class="search-box">
+<div class="search-box">
                     <input type="text" id="filter-search-input" placeholder="¿Qué producto estás buscando?">
-                    <select id="filter-categoria" class="search-cat-select">
+                    <button class="search-btn" id="filter-search-btn" aria-label="Buscar"><i class="fas fa-search"></i></button>
+                </div>
+
+                <div class="hero-secondary-row">
+                    <select id="filter-categoria">
                         <option value="todos">Todas las categorías</option>
                         <option value="notebooks">💻 Notebooks</option>
                         <option value="perifericos">⌨️ Periféricos</option>
@@ -62,10 +66,6 @@
                         <option value="celulares">📱 Celulares</option>
                         <option value="accesorios">🔌 Accesorios</option>
                     </select>
-                    <button class="search-btn" id="filter-search-btn" aria-label="Buscar"><i class="fas fa-search"></i></button>
-                </div>
-
-                <div class="hero-secondary-row">
                     <select id="filter-price-sort">
                         <option value="">Ordenar por precio</option>
                         <option value="asc">Precio: Menor a mayor</option>
