@@ -10,15 +10,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
     <style>
-        /* ===========================================
-           TOKENS + RESET (autocontenido, no depende
-           del style.css del sitio público)
-           =========================================== */
         :root {
             --purple: #8A54FD; --blue: #6FA7F0; --cyan: #5DDFE7;
             --ink: #15121F; --muted: #6B6580; --paper: #F7F7FB; --card: #FFFFFF; --line: #E7E4F2;
             --grad: linear-gradient(120deg, #8A54FD, #6FA7F0 55%, #5DDFE7);
             --grad-soft: linear-gradient(120deg, rgba(138,84,253,0.08), rgba(93,223,231,0.08));
+            --danger: #E14D4D; --danger-bg: #FDEDED;
             --font-display: 'Space Grotesk', sans-serif;
             --font-body: 'Inter', sans-serif;
             --font-mono: 'IBM Plex Mono', monospace;
@@ -27,560 +24,426 @@
         html, body { background: var(--paper); color: var(--ink); }
         a { color: inherit; }
         h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.01em; }
+        .hidden { display: none !important; }
 
-        /* ---------- LOGIN ---------- */
-        .admin-login {
-            min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative;
-        }
-        .login-visual {
-            background: var(--grad); position: relative; overflow: hidden;
-            display: flex; flex-direction: column; justify-content: space-between; padding: 44px;
-            color: white;
-        }
-        .login-visual::before, .login-visual::after {
-            content: ''; position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.35;
-        }
+        .admin-login { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; }
+        .login-visual { background: var(--grad); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 44px; color: white; }
+        .login-visual::before, .login-visual::after { content: ''; position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.35; }
         .login-visual::before { width: 260px; height: 260px; background: white; top: -80px; left: -80px; }
         .login-visual::after { width: 300px; height: 300px; background: var(--ink); bottom: -120px; right: -100px; }
         .login-visual-top { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 18px; }
         .login-visual-top img { width: 34px; height: 34px; object-fit: contain; }
         .login-visual-quote { position: relative; z-index: 1; font-family: var(--font-display); font-size: 28px; line-height: 1.3; max-width: 22ch; }
         .login-visual-note { position: relative; z-index: 1; font-family: var(--font-mono); font-size: 12px; opacity: 0.85; letter-spacing: 0.03em; }
-
         .login-form-side { display: flex; align-items: center; justify-content: center; padding: 40px; }
         .login-box { width: 100%; max-width: 380px; }
-        .login-box .eyebrow {
-            display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11.5px;
-            letter-spacing: 0.06em; text-transform: uppercase; color: var(--purple); font-weight: 600; margin-bottom: 10px;
-        }
+        .login-box .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--purple); font-weight: 600; margin-bottom: 10px; }
         .login-box .eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--purple); }
         .login-box h2 { font-size: 24px; margin-bottom: 26px; }
-
-        .back-home-btn {
-            position: absolute; top: 24px; left: 24px; z-index: 5; background: rgba(255,255,255,0.9); color: var(--ink);
-            border: 1px solid var(--line); padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600;
-            display: flex; align-items: center; gap: 8px; transition: all 0.2s;
-        }
+        .back-home-btn { position: absolute; top: 24px; left: 24px; z-index: 5; background: rgba(255,255,255,0.9); color: var(--ink); border: 1px solid var(--line); padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
         .back-home-btn:hover { background: white; transform: translateX(-3px); }
+        .btn-login { width: 100%; padding: 15px; background: var(--grad); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; box-shadow: 0 10px 26px -10px rgba(138,84,253,0.55); }
+        .btn-login:hover { opacity: 0.9; }
+        .login-error { display: none; background: #FDEDED; color: #C43D3D; border: 1px solid #F4C6C6; font-size: 13px; padding: 11px 14px; border-radius: 10px; margin-bottom: 16px; }
+        .login-error.show { display: block; }
+        .login-hint { text-align: center; margin-top: 16px; font-size: 12px; color: var(--muted); }
+        @media (max-width: 860px) { .admin-login { grid-template-columns: 1fr; } .login-visual { display: none; } }
 
         .form-group { margin-bottom: 18px; text-align: left; }
         .form-group label { display: block; margin-bottom: 7px; color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
         .form-group input, .form-group textarea, .form-group select {
-            width: 100%; padding: 13px 16px; border: 1px solid var(--line); border-radius: 12px;
+            width: 100%; padding: 12px 15px; border: 1px solid var(--line); border-radius: 12px;
             font-size: 14px; background: white; transition: border-color 0.2s; font-family: var(--font-body);
         }
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--purple); }
         .form-group small { display: block; color: var(--muted); font-size: 11.5px; margin-top: 6px; }
-
-        .btn-login, .btn-save {
-            width: 100%; padding: 15px; background: var(--grad); color: white; border: none;
-            border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
-            box-shadow: 0 10px 26px -10px rgba(138,84,253,0.55);
-        }
-        .btn-login:hover, .btn-save:hover { opacity: 0.9; }
-
-        .login-error { display: none; background: #FDEDED; color: #C43D3D; border: 1px solid #F4C6C6; font-size: 13px; padding: 11px 14px; border-radius: 10px; margin-bottom: 16px; }
-        .login-error.show { display: block; }
-        .login-hint { text-align: center; margin-top: 16px; font-size: 12px; color: var(--muted); }
-
-        @media (max-width: 860px) {
-            .admin-login { grid-template-columns: 1fr; }
-            .login-visual { display: none; }
-        }
-
-        /* ---------- DASHBOARD ---------- */
-        .admin-panel { display: none; min-height: 100vh; }
-        .admin-panel.show { display: block; }
-
-        .admin-header {
-            position: sticky; top: 0; z-index: 50; background: rgba(247,247,251,0.85); backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--line); padding: 18px 32px;
-            display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
-        }
-        .admin-header-left { display: flex; align-items: center; gap: 18px; }
-        .admin-header-left img { width: 30px; height: 30px; object-fit: contain; }
-        .admin-header h1 { font-size: 17px; }
-        .admin-header-left p#welcome-message { font-size: 12px; color: var(--muted); margin-top: 1px; }
-
-        .btn-back, .btn-logout { border: none; padding: 10px 18px; border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 7px; transition: all 0.2s; }
-        .btn-back { background: white; border: 1px solid var(--line); color: var(--ink); }
-        .btn-back:hover { border-color: var(--purple); color: var(--purple); }
-        .btn-logout { background: #FDEDED; color: #C43D3D; }
-        .btn-logout:hover { background: #F9D8D8; }
-
-        .admin-content { max-width: 1080px; margin: 0 auto; padding: 40px 24px; }
-        .admin-card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px; margin-bottom: 24px; box-shadow: 0 20px 50px -36px rgba(21,18,31,0.3); }
-        .admin-card .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--purple); font-weight: 600; margin-bottom: 6px; }
-        .admin-card .eyebrow::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--purple); }
-        .admin-card h2 { font-size: 18px; margin-bottom: 4px; }
-        .admin-card .card-desc { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
-
-        /* Drop zone */
-        .drop-zone {
-            border: 2px dashed var(--line); border-radius: 16px; padding: 36px; text-align: center; margin-bottom: 20px;
-            cursor: pointer; transition: all 0.2s; background: var(--paper);
-        }
-        .drop-zone:hover, .drop-zone.dragover { border-color: var(--purple); background: var(--grad-soft); }
-        .drop-zone i { font-size: 30px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 10px; display: block; }
-        .drop-zone p { margin: 0; font-size: 13.5px; color: var(--muted); }
-
-        .image-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 18px; }
-        .image-preview .img-wrap { position: relative; }
-        .image-preview img { width: 100%; height: 130px; object-fit: cover; background: var(--paper); border-radius: 12px; border: 1px solid var(--line); display: block; }
-        .image-preview .remove-img { position: absolute; top: -7px; right: -7px; width: 22px; height: 22px; background: #E14D4D; color: white; border-radius: 50%; border: none; cursor: pointer; font-size: 12px; display: grid; place-items: center; }
-
-        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn-row > * { flex: 1; min-width: 140px; }
-        .btn-outline-gray { padding: 15px; background: white; border: 1px solid var(--line); color: var(--muted); border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .btn-outline-gray:hover { border-color: var(--muted); color: var(--ink); }
-        .btn-orange { padding: 15px; background: #FFB020; color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        .btn-orange:hover { opacity: 0.9; }
-        .btn-blue { background: var(--grad); color: white; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13.5px; display: inline-flex; align-items: center; gap: 8px; }
-
-        /* Vista previa de precio — mockup tipo ficha del sitio */
-        .price-preview-box {
-            padding: 16px 18px; background: var(--ink); color: white; border-radius: 14px; text-align: center;
-            font-family: var(--font-mono); font-size: 17px; font-weight: 600; position: relative;
-        }
-        .price-preview-box::before {
-            content: 'VISTA PREVIA'; position: absolute; top: -9px; left: 16px; background: var(--paper);
-            color: var(--muted); font-size: 9.5px; padding: 0 6px; letter-spacing: 0.06em; border-radius: 4px;
-        }
-
         .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn-save { padding: 14px 22px; background: var(--grad); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+        .btn-save:hover { opacity: 0.9; }
+        .btn-outline-gray { padding: 14px 22px; background: white; border: 1px solid var(--line); color: var(--muted); border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-outline-gray:hover { border-color: var(--muted); color: var(--ink); }
+        .btn-danger { padding: 14px 22px; background: var(--danger); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+        .btn-danger:hover { opacity: 0.9; }
+        .btn-row { display: flex; gap: 10px; }
+        .btn-row > * { flex: 1; }
+        .section-title-mini { font-family: var(--font-mono); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--purple); padding-bottom: 8px; border-bottom: 1px dashed var(--line); margin: 6px 0 4px; }
+        .warning-box { background: #FFF7E8; padding: 16px; border-radius: 14px; border: 1px dashed #FFB020; margin-bottom: 4px; }
+        .warning-box label { display: block; font-weight: 600; font-size: 12px; margin-bottom: 10px; color: var(--ink); text-transform: none; letter-spacing: 0; }
 
-        /* Item de producto/servicio en listas */
-        .product-item { display: flex; gap: 16px; padding: 16px 4px; border-bottom: 1px solid var(--line); align-items: center; }
-        .product-item:last-child { border-bottom: none; }
-        .product-item img { width: 66px; height: 66px; object-fit: cover; background: var(--paper); border-radius: 12px; flex-shrink: 0; }
-        .product-item-info { flex: 1; min-width: 0; }
-        .product-item-info h3 { color: var(--ink); font-size: 14.5px; margin-bottom: 4px; font-family: var(--font-body); font-weight: 600; }
-        .product-item-info .price { color: var(--purple); font-weight: 600; font-size: 15px; margin-bottom: 3px; font-family: var(--font-mono); }
-        .product-item-info .meta { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
-        .product-item-actions { display: flex; gap: 8px; flex-shrink: 0; }
-        .icon-btn { width: 34px; height: 34px; border: none; border-radius: 10px; cursor: pointer; display: grid; place-items: center; font-size: 13px; transition: all 0.2s; }
-        .icon-btn.edit { background: var(--grad-soft); color: var(--purple); }
-        .icon-btn.edit:hover { background: var(--purple); color: white; }
-        .icon-btn.delete { background: #FDEDED; color: #C43D3D; }
-        .icon-btn.delete:hover { background: #C43D3D; color: white; }
+        .admin-shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+        .admin-sidebar {
+            background: var(--ink); color: rgba(255,255,255,0.75); padding: 22px 14px;
+            display: flex; flex-direction: column; gap: 3px; position: sticky; top: 0; height: 100vh;
+        }
+        .admin-sidebar-brand { display: flex; align-items: center; gap: 10px; color: white; font-family: var(--font-display); font-weight: 700; padding: 6px 10px 22px; }
+        .admin-sidebar-brand img { width: 28px; height: 28px; }
+        .admin-nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 10px;
+            font-weight: 600; font-size: 13.5px; border: none; background: none; width: 100%; text-align: left;
+            color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s;
+        }
+        .admin-nav-item i { width: 16px; text-align: center; flex-shrink: 0; }
+        .admin-nav-item:hover { background: rgba(255,255,255,0.06); color: white; }
+        .admin-nav-item.is-active { background: var(--grad); color: white; }
+        .admin-sidebar-footer { margin-top: auto; display: flex; flex-direction: column; gap: 4px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.12); }
+        .admin-sidebar-footer a, .admin-sidebar-footer button { color: rgba(255,255,255,0.6); font-size: 12.5px; background: none; border: none; text-align: left; padding: 8px 10px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .admin-sidebar-footer a:hover, .admin-sidebar-footer button:hover { color: white; }
 
-        .status-pill { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; margin-left: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
-        .status-pill.ok { background: rgba(23,184,172,0.12); color: #0F8F84; }
-        .status-pill.low { background: rgba(255,176,32,0.15); color: #B87400; }
-        .status-pill.out { background: #FDEDED; color: #C43D3D; }
+        .admin-main { overflow-x: hidden; }
+        .admin-topbar {
+            display: flex; align-items: center; justify-content: space-between; padding: 18px 30px;
+            background: rgba(247,247,251,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+            position: sticky; top: 0; z-index: 50; gap: 14px; flex-wrap: wrap;
+        }
+        .admin-topbar-left { display: flex; align-items: center; gap: 14px; }
+        .admin-topbar h2 { font-size: 17px; }
+        .nav-toggle { display: none; width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 8px; background: white; align-items: center; justify-content: center; }
+        #welcome-message { font-size: 11.5px; color: var(--muted); font-family: var(--font-mono); }
+        .admin-content { padding: 32px; max-width: 1000px; }
 
-        @media (max-width: 640px) { .product-item { flex-direction: column; text-align: center; } .product-item img { width: 100%; height: 160px; } .product-item-actions { width: 100%; justify-content: center; } }
+        @media (max-width: 900px) {
+            .admin-shell { grid-template-columns: 1fr; }
+            .admin-sidebar { position: fixed; inset: 0 auto 0 0; width: 230px; height: 100vh; transform: translateX(-100%); transition: transform 0.2s ease; z-index: 300; }
+            .admin-sidebar.is-open { transform: translateX(0); }
+            .nav-toggle { display: flex; }
+            .admin-content { padding: 20px 16px; }
+            .field-grid { grid-template-columns: 1fr; }
+        }
 
-        .highlight-box { background: var(--grad-soft); padding: 16px; border-radius: 14px; margin-bottom: 18px; }
-        .warning-box { background: #FFF7E8; padding: 16px; border-radius: 14px; border: 1px dashed #FFB020; margin-bottom: 18px; }
+        .admin-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+        .admin-search { position: relative; flex: 1; max-width: 320px; }
+        .admin-search i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 13px; }
+        .admin-search input { padding-left: 38px !important; }
+
+        .admin-table-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow-x: auto; }
+        .admin-table { width: 100%; min-width: 600px; border-collapse: collapse; font-size: 13.5px; }
+        .admin-table th { text-align: left; padding: 13px 18px; background: var(--paper); color: var(--muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; border-bottom: 1px solid var(--line); }
+        .admin-table td { padding: 12px 18px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+        .admin-table tr:last-child td { border-bottom: none; }
+        .admin-table tr:hover td { background: var(--grad-soft); }
+        .row-thumb { width: 42px; height: 42px; border-radius: 10px; background: var(--paper); object-fit: cover; flex-shrink: 0; }
+        .row-name { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+        .row-sku { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+        .row-actions { display: flex; gap: 6px; justify-content: flex-end; }
+        .icon-btn { width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--line); background: white; display: grid; place-items: center; color: var(--muted); font-size: 12px; cursor: pointer; transition: all 0.2s; }
+        .icon-btn:hover { border-color: var(--purple); color: var(--purple); }
+        .icon-btn.danger:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-bg); }
+        .admin-empty { padding: 46px 20px; text-align: center; color: var(--muted); font-size: 13.5px; }
+
+        .badge-mini { display: inline-block; font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 999px; text-transform: uppercase; color: white; }
+        .badge-mini.oferta { background: #E14D4D; }
+        .badge-mini.nuevo { background: var(--grad); }
+        .badge-mini.destacado { background: var(--ink); }
+
+        .list-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
+        .list-card-left { display: flex; gap: 14px; }
+        .list-card-thumb { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; background: var(--paper); flex-shrink: 0; }
+        .list-card-body h4 { font-size: 14px; margin-bottom: 4px; font-family: var(--font-body); font-weight: 600; }
+        .list-card-body p { font-size: 12.5px; color: var(--muted); }
+
+        .drawer-overlay { position: fixed; inset: 0; background: rgba(21,18,31,0.5); z-index: 800; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+        .drawer-overlay.is-open { opacity: 1; pointer-events: auto; }
+        .drawer {
+            position: fixed; top: 0; right: 0; height: 100vh; width: 100%; max-width: 500px; background: var(--paper);
+            box-shadow: -20px 0 60px rgba(21,18,31,0.25); transform: translateX(100%); transition: transform 0.25s ease;
+            display: flex; flex-direction: column;
+        }
+        .drawer-overlay.is-open .drawer { transform: translateX(0); }
+        .drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 26px; border-bottom: 1px solid var(--line); background: white; }
+        .drawer-head h3 { font-size: 16px; }
+        .drawer-body { flex: 1; overflow-y: auto; padding: 24px 26px; }
+        .drawer-foot { padding: 18px 26px; border-top: 1px solid var(--line); background: white; display: flex; gap: 10px; }
+        .drawer-close { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: white; display: grid; place-items: center; cursor: pointer; }
+        .drawer-close:hover { background: var(--ink); color: white; }
+
+        .dropzone { border: 2px dashed var(--line); border-radius: 16px; padding: 30px 16px; text-align: center; cursor: pointer; background: white; transition: all 0.2s; margin-bottom: 6px; }
+        .dropzone:hover, .dropzone.is-dragover { border-color: var(--purple); background: var(--grad-soft); }
+        .dropzone i { font-size: 26px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 8px; display: block; }
+        .dropzone p { font-size: 12.5px; color: var(--muted); }
+        .photo-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; margin-bottom: 18px; }
+        .photo-thumb { position: relative; width: 76px; height: 76px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+        .photo-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .photo-thumb .photo-remove { position: absolute; top: 3px; right: 3px; width: 19px; height: 19px; border-radius: 50%; background: rgba(21,18,31,0.75); color: white; border: none; font-size: 10px; cursor: pointer; }
+        .photo-thumb .photo-main { position: absolute; bottom: 3px; left: 3px; font-size: 8.5px; font-weight: 700; background: rgba(255,255,255,0.92); padding: 2px 6px; border-radius: 5px; color: var(--purple); }
+
+        .price-preview-box { padding: 14px 16px; background: var(--ink); color: white; border-radius: 12px; text-align: center; font-family: var(--font-mono); font-size: 15px; font-weight: 600; margin-bottom: 18px; }
 
         .social-row { display: flex; gap: 8px; margin-bottom: 8px; }
-        .social-row select { flex: 0 0 130px; }
+        .social-row select { flex: 0 0 120px; }
         .social-row input { flex: 1; }
-        .social-row .remove-social { background: #FDEDED; color: #C43D3D; border: none; border-radius: 10px; width: 42px; cursor: pointer; }
+        .social-row .remove-social { background: var(--danger-bg); color: var(--danger); border: none; border-radius: 10px; width: 42px; cursor: pointer; }
 
-        /* ---------- MODAL DE RECORTE ---------- */
         .crop-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(21,18,31,0.8); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
         .crop-modal-overlay.show { display: flex; }
-        .crop-modal-box { background: white; border-radius: 20px; padding: 22px; max-width: 520px; width: 100%; }
-        .crop-modal-box h3 { margin-bottom: 15px; text-align: center; font-size: 17px; }
-        #crop-container { position: relative; width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 14px; overflow: hidden; touch-action: none; user-select: none; }
-        #crop-image { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
-        #crop-rect { position: absolute; box-shadow: 0 0 0 9999px rgba(0,0,0,0.6); border: 2px solid white; cursor: move; }
-        .crop-grid-line { position: absolute; background: rgba(255,255,255,0.5); }
-        .crop-handle { position: absolute; width: 22px; height: 22px; }
-        .crop-hint { text-align: center; color: var(--muted); font-size: 12px; margin-top: 10px; }
+        .crop-modal-box { background: white; border-radius: 20px; padding: 22px; max-width: 480px; width: 100%; }
+        .crop-modal-box h3 { margin-bottom: 15px; text-align: center; font-size: 16px; }
+        .crop-stage { position: relative; width: 100%; aspect-ratio: 1; background: #0c0a12; border-radius: 14px; overflow: hidden; touch-action: none; user-select: none; }
+        .crop-stage img { position: absolute; top: 0; left: 0; user-select: none; pointer-events: none; }
+        .crop-frame { position: absolute; border: 2px solid white; box-shadow: 0 0 0 1000px rgba(0,0,0,0.55); cursor: move; }
+        .crop-frame::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(255,255,255,0.45) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.45) 1px, transparent 1px); background-size: 33.33% 33.33%; }
+        .crop-handle { position: absolute; width: 16px; height: 16px; background: white; border: 2px solid var(--purple); border-radius: 50%; z-index: 5; }
+        .crop-handle.nw { top: -8px; left: -8px; cursor: nwse-resize; } .crop-handle.ne { top: -8px; right: -8px; cursor: nesw-resize; }
+        .crop-handle.sw { bottom: -8px; left: -8px; cursor: nesw-resize; } .crop-handle.se { bottom: -8px; right: -8px; cursor: nwse-resize; }
+        .crop-hint { text-align: center; color: var(--muted); font-size: 12px; margin: 12px 0; }
 
-        /* ---------- MODAL DE CONFIRMACIÓN ---------- */
         .confirm-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(21,18,31,0.7); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
         .confirm-modal-overlay.show { display: flex; }
         .confirm-modal-box { background: white; border-radius: 20px; padding: 30px; max-width: 380px; width: 100%; text-align: center; }
-        .confirm-modal-box .emoji { font-size: 36px; margin-bottom: 14px; }
-        .confirm-modal-box h3 { font-size: 17px; margin-bottom: 10px; }
-        .confirm-modal-box p { color: var(--muted); margin-bottom: 22px; line-height: 1.5; font-size: 13.5px; }
+        .confirm-modal-box .emoji { font-size: 34px; margin-bottom: 12px; }
+        .confirm-modal-box h3 { font-size: 16px; margin-bottom: 8px; }
+        .confirm-modal-box p { color: var(--muted); margin-bottom: 22px; font-size: 13.5px; line-height: 1.5; }
 
-        /* ---------- TOASTS ---------- */
-        #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; max-width: calc(100% - 40px); }
+        #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: var(--ink); color: white; padding: 13px 18px; border-radius: 12px; font-size: 13.5px; box-shadow: 0 14px 34px -14px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px; opacity: 0; transform: translateY(10px); transition: all 0.25s ease; }
         .toast.show { opacity: 1; transform: translateY(0); }
         .toast.success { background: #0F8F84; }
-        .toast.error { background: #C43D3D; }
+        .toast.error { background: var(--danger); }
 
-        @media (max-width: 640px) { .field-grid { grid-template-columns: 1fr; } .admin-header { padding: 14px 18px; } .admin-content { padding: 24px 16px; } }
+        .admin-section { display: none; }
+        .admin-section.is-active { display: block; }
     </style>
 </head>
 <body>
 
-<!-- ======================================================
-     LOGIN
-     ====================================================== -->
 <div class="admin-login" id="admin-login">
-    <button class="back-home-btn" onclick="window.location.href='index.html'">
-        <i class="fas fa-arrow-left"></i> Volver al inicio
-    </button>
-
+    <button class="back-home-btn" onclick="window.location.href='index.html'"><i class="fas fa-arrow-left"></i> Volver al inicio</button>
     <div class="login-visual">
-        <div class="login-visual-top">
-            <img src="img/logo.png" alt="JAVÜ Store"> JAVÜ Store
-        </div>
+        <div class="login-visual-top"><img src="img/logo.png" alt="JAVÜ Store"> JAVÜ Store</div>
         <div class="login-visual-quote">Cada producto que cargás acá, aparece al toque en el sitio.</div>
         <div class="login-visual-note">PANEL // ADMINISTRACIÓN</div>
     </div>
-
     <div class="login-form-side">
         <div class="login-box">
             <span class="eyebrow">Acceso privado</span>
             <h2>Ingresá a tu panel</h2>
-
             <div class="login-error" id="login-error">Correo o contraseña incorrectos.</div>
-
-            <div class="form-group">
-                <label for="username">Correo</label>
-                <input type="email" id="username" placeholder="admin@javustore.com">
-            </div>
-            <div class="form-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" placeholder="••••••••">
-            </div>
+            <div class="form-group"><label for="username">Correo</label><input type="email" id="username" placeholder="admin@javustore.com"></div>
+            <div class="form-group"><label for="password">Contraseña</label><input type="password" id="password" placeholder="••••••••"></div>
             <button class="btn-login" onclick="login()">Iniciar sesión</button>
             <p class="login-hint">Acceso solo para administradores autorizados.</p>
         </div>
     </div>
 </div>
 
-<!-- ======================================================
-     DASHBOARD
-     ====================================================== -->
-<div class="admin-panel" id="admin-panel">
-    <div class="admin-header">
-        <div class="admin-header-left">
-            <button class="btn-back" onclick="window.location.href='index.html'">
-                <i class="fas fa-arrow-left"></i> Volver
-            </button>
-            <img src="img/logo.png" alt="JAVÜ Store">
-            <div>
-                <h1>Panel de administración</h1>
-                <p id="welcome-message"></p>
-            </div>
+<div class="admin-shell hidden" id="admin-panel">
+    <aside class="admin-sidebar" id="admin-sidebar">
+        <div class="admin-sidebar-brand"><img src="img/logo.png" alt="JAVÜ"> JAVÜ Store</div>
+        <button class="admin-nav-item is-active" data-section="productos"><i class="fas fa-laptop"></i> Productos</button>
+        <button class="admin-nav-item" data-section="servicios"><i class="fas fa-screwdriver-wrench"></i> Servicios</button>
+        <button class="admin-nav-item" data-section="faq"><i class="fas fa-circle-question"></i> Preguntas frecuentes</button>
+        <button class="admin-nav-item" data-section="nosotros"><i class="fas fa-heart"></i> Sobre nosotros</button>
+        <button class="admin-nav-item" data-section="contacto"><i class="fas fa-comment-dots"></i> Contacto y redes</button>
+        <button class="admin-nav-item" data-section="portada"><i class="fas fa-image"></i> Portada</button>
+        <div class="admin-sidebar-footer">
+            <a href="index.html" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i> Ver sitio público</a>
+            <button id="logoutBtn" onclick="confirmLogout()"><i class="fas fa-right-from-bracket"></i> Cerrar sesión</button>
         </div>
-        <button class="btn-logout" onclick="confirmLogout()">
-            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-        </button>
-    </div>
+    </aside>
 
-    <div class="admin-content">
-
-        <!-- ============ PRODUCTO ============ -->
-        <div class="admin-card">
-            <span class="eyebrow">Catálogo</span>
-            <h2>Agregar nuevo producto</h2>
-            <p class="card-desc">Cargá fotos, precio y detalles. Las fotos se comprimen automáticamente al subir.</p>
-
-            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Arrastrá las fotos aquí o hacé clic para seleccionar</p>
-            </div>
-            <input type="file" id="file-input" multiple accept="image/*" style="display: none;" onchange="handleFiles(this.files)">
-            <div class="image-preview" id="image-preview"></div>
-
-            <div class="form-group" style="margin-top: 22px;">
-                <label>Nombre del producto</label>
-                <input type="text" id="prod-title" placeholder='Ej: Notebook 15.6" Ryzen 5 · 16GB · 512GB SSD'>
-            </div>
-
-            <div class="field-grid">
-                <div class="form-group">
-                    <label>Categoría</label>
-                    <select id="prod-category">
-                        <option value="notebooks">💻 Notebooks</option>
-                        <option value="perifericos">⌨️ Periféricos</option>
-                        <option value="componentes">🔧 Componentes</option>
-                        <option value="gaming">🎮 Gaming</option>
-                        <option value="celulares">📱 Celulares</option>
-                        <option value="accesorios">🔌 Accesorios</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Estado de stock</label>
-                    <select id="prod-status">
-                        <option value="stock">🟢 En stock</option>
-                        <option value="ultimas">🟡 Últimas unidades</option>
-                        <option value="sinstock">🔴 Sin stock</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Badge / etiqueta</label>
-                    <select id="prod-badge">
-                        <option value="">Sin badge</option>
-                        <option value="oferta">🔴 Oferta</option>
-                        <option value="nuevo">🟢 Nuevo</option>
-                        <option value="destacado">🔵 Destacado</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>SKU (opcional)</label>
-                    <input type="text" id="prod-sku" placeholder="Se genera automático">
-                </div>
-            </div>
-
-            <div class="field-grid">
-                <div class="form-group">
-                    <label>Precio en guaraníes</label>
-                    <input type="text" id="prod-price-gs" placeholder="6.490.000" oninput="formatNumber(this); updatePricePreview();">
-                </div>
-                <div class="form-group">
-                    <label>Precio en USD (opcional)</label>
-                    <input type="text" id="prod-price-usd" placeholder="850" oninput="formatNumber(this); updatePricePreview();">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="price-preview-box" id="price-preview">Completá el precio arriba</div>
-            </div>
-
-            <div class="form-group">
-                <label>Descripción</label>
-                <textarea id="prod-description" rows="4" placeholder="Detalles del producto, garantía, etc."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Especificaciones (separadas por coma)</label>
-                <input type="text" id="prod-specs" placeholder="Ej: 16GB RAM, 512GB SSD, Ryzen 5">
-            </div>
-
-            <div class="warning-box">
-                <label style="display:block; margin-bottom:10px; font-weight:600; font-size:13px;">🔒 Proveedor (privado, solo este panel)</label>
-                <input type="text" id="prod-supplier-name" placeholder="Nombre del proveedor" style="margin-bottom: 10px;">
-                <input type="text" id="prod-supplier-phone" placeholder="Ej: 0986767459" oninput="formatOwnerPhone(this)">
-                <small>Este dato nunca se muestra en el sitio público.</small>
-            </div>
-
-            <input type="hidden" id="edit-product-id" value="">
-
-            <div class="btn-row">
-                <button class="btn-save" onclick="saveProduct()"><i class="fas fa-save"></i> Guardar producto</button>
-                <button class="btn-orange" onclick="saveDraftManual()"><i class="fas fa-clock"></i> Guardar borrador</button>
-                <button class="btn-outline-gray" onclick="cancelEdit()"><i class="fas fa-times"></i> Cancelar</button>
+    <div class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-topbar-left">
+                <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+                <div><h2 id="topbarTitle">Productos</h2><p id="welcome-message"></p></div>
             </div>
         </div>
 
-        <!-- ============ LISTA DE PRODUCTOS ============ -->
-        <div class="admin-card">
-            <span class="eyebrow">Publicados</span>
-            <h2>Productos</h2>
-            <div id="products-container"></div>
-        </div>
-
-        <!-- ============ SERVICIOS ============ -->
-        <div class="admin-card">
-            <span class="eyebrow">Más allá de la venta</span>
-            <h2>Servicios</h2>
-            <p class="card-desc">Agregá, editá o eliminá los servicios que se muestran en el sitio, con su foto.</p>
-
-            <div class="drop-zone" id="service-drop-zone" onclick="document.getElementById('service-file-input').click()">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Arrastrá una foto aquí o hacé clic para seleccionar</p>
-            </div>
-            <input type="file" id="service-file-input" accept="image/*" style="display: none;" onchange="handleServiceFiles(this.files)">
-            <div class="image-preview" id="service-image-preview"></div>
-
-            <div class="form-group" style="margin-top: 20px;">
-                <label>Título del servicio</label>
-                <input type="text" id="service-title" placeholder="Ej: Armado de PC a medida">
-            </div>
-            <div class="form-group">
-                <label>Descripción</label>
-                <textarea id="service-description" rows="3" placeholder="Contá brevemente en qué consiste..."></textarea>
-            </div>
-
-            <input type="hidden" id="edit-service-id" value="">
-
-            <div class="btn-row">
-                <button class="btn-save" onclick="saveService()"><i class="fas fa-save"></i> Guardar servicio</button>
-                <button class="btn-outline-gray" onclick="cancelServiceEdit()"><i class="fas fa-times"></i> Cancelar</button>
-            </div>
-
-            <h3 style="margin: 26px 0 14px; font-size: 15px;">Servicios publicados</h3>
-            <div id="services-container"></div>
-        </div>
-
-        <!-- ============ FAQ ============ -->
-        <div class="admin-card">
-            <span class="eyebrow">Ayuda</span>
-            <h2>Preguntas frecuentes</h2>
-            <div class="form-group">
-                <label>Pregunta</label>
-                <input type="text" id="faq-question-input" placeholder="Ej: ¿Hacen envíos al interior del país?">
-            </div>
-            <div class="form-group">
-                <label>Respuesta</label>
-                <textarea id="faq-answer-input" rows="3" placeholder="Escribí la respuesta completa..."></textarea>
-            </div>
-            <input type="hidden" id="edit-faq-id" value="">
-            <div class="btn-row" style="margin-bottom: 24px;">
-                <button class="btn-save" onclick="saveFaq()"><i class="fas fa-save"></i> Guardar pregunta</button>
-                <button class="btn-outline-gray" onclick="cancelFaqEdit()"><i class="fas fa-times"></i> Cancelar</button>
-            </div>
-            <div id="faq-container"></div>
-        </div>
-
-        <!-- ============ SOBRE NOSOTROS ============ -->
-        <div class="admin-card">
-            <span class="eyebrow">Marca</span>
-            <h2>Sección "Sobre Nosotros"</h2>
-            <p class="card-desc">Si no completás algún campo, se mantiene el texto actual del sitio.</p>
-
-            <div class="form-group">
-                <label>Subtítulo pequeño</label>
-                <input type="text" id="content-subtitle" placeholder="QUIÉNES SOMOS">
-            </div>
-            <div class="form-group">
-                <label>Título grande</label>
-                <input type="text" id="content-title" placeholder="Vendemos tecnología, no promesas.">
-            </div>
-            <div class="form-group">
-                <label>Párrafo de descripción</label>
-                <textarea id="content-text" rows="3" placeholder="Somos un equipo local especializado en tecnología..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Foto de la sección</label>
-                <img id="content-image-preview" src="" style="display:none; max-width: 200px; width: 100%; border-radius: 14px; margin-bottom: 12px;">
-                <input type="file" id="content-image-input" accept="image/*" style="display:none" onchange="handleContentImageSelect(this.files, 'content')">
-                <button type="button" class="btn-blue" onclick="document.getElementById('content-image-input').click()">
-                    <i class="fas fa-crop"></i> Elegir y recortar imagen
-                </button>
-            </div>
-
-            <div class="highlight-box">
-                <label style="display:block; font-weight:600; margin-bottom:8px; font-size:13px;">Feature 1</label>
-                <input type="text" id="content-feature1-title" placeholder="Garantía oficial" style="margin-bottom: 10px;">
-                <input type="text" id="content-feature1-text" placeholder="Todos los productos con garantía y soporte post-venta.">
-            </div>
-            <div class="highlight-box">
-                <label style="display:block; font-weight:600; margin-bottom:8px; font-size:13px;">Feature 2</label>
-                <input type="text" id="content-feature2-title" placeholder="Envíos a todo el país" style="margin-bottom: 10px;">
-                <input type="text" id="content-feature2-text" placeholder="Coordinamos entrega en Asunción e interior.">
-            </div>
-            <div class="highlight-box">
-                <label style="display:block; font-weight:600; margin-bottom:8px; font-size:13px;">Feature 3</label>
-                <input type="text" id="content-feature3-title" placeholder="Pago flexible" style="margin-bottom: 10px;">
-                <input type="text" id="content-feature3-text" placeholder="Efectivo, transferencia y tarjetas.">
-            </div>
-            <div class="highlight-box">
-                <label style="display:block; font-weight:600; margin-bottom:8px; font-size:13px;">Feature 4</label>
-                <input type="text" id="content-feature4-title" placeholder="Atención directa" style="margin-bottom: 10px;">
-                <input type="text" id="content-feature4-text" placeholder="Consultas por WhatsApp, respuesta en el día.">
-            </div>
-
-            <div class="form-group">
-                <label>Texto del pie de página</label>
-                <textarea id="content-footer-text" rows="3" placeholder="Tienda de tecnología con atención directa..."></textarea>
-            </div>
-
-            <button class="btn-save" onclick="saveContenido()"><i class="fas fa-save"></i> Guardar personalización</button>
-        </div>
-
-        <!-- ============ CONTACTO Y REDES ============ -->
-        <div class="admin-card">
-            <span class="eyebrow">Comunicación</span>
-            <h2>Contacto y redes sociales</h2>
-            <p class="card-desc">Afecta el footer, el botón flotante y la burbuja de WhatsApp del sitio.</p>
-
-            <div class="field-grid">
-                <div class="form-group">
-                    <label>WhatsApp (con código de país)</label>
-                    <input type="text" id="footer-whatsapp" placeholder="595991192212">
+        <div class="admin-content">
+            <section class="admin-section is-active" id="section-productos">
+                <div class="admin-toolbar">
+                    <label class="admin-search"><i class="fas fa-magnifying-glass"></i><input type="text" id="productSearch" placeholder="Buscar producto..."></label>
+                    <button class="btn-save" id="btnNewProduct"><i class="fas fa-plus"></i> Nuevo producto</button>
                 </div>
-                <div class="form-group">
-                    <label>Mensaje de bienvenida</label>
-                    <input type="text" id="footer-wa-message" placeholder="¡Hola! ¿En qué producto estás interesado?">
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Badge</th><th></th></tr></thead>
+                        <tbody id="productsTableBody"></tbody>
+                    </table>
                 </div>
-                <div class="form-group">
-                    <label>Email de contacto</label>
-                    <input type="email" id="footer-email" placeholder="correo@javustore.com.py">
-                </div>
-                <div class="form-group">
-                    <label>Dirección / ubicación</label>
-                    <input type="text" id="footer-address" placeholder="Curuguaty, Canindeyú, Paraguay">
-                </div>
-            </div>
+            </section>
 
-            <div class="form-group" style="margin-top: 6px;">
-                <label>Redes sociales</label>
-                <div id="social-rows-container"></div>
-                <button type="button" class="btn-outline-gray" style="width:auto; padding: 9px 18px; margin-top: 6px;" onclick="addSocialRow()">
-                    <i class="fas fa-plus"></i> Agregar red social
-                </button>
-            </div>
+            <section class="admin-section" id="section-servicios">
+                <div class="admin-toolbar"><div></div><button class="btn-save" id="btnNewService"><i class="fas fa-plus"></i> Nuevo servicio</button></div>
+                <div id="servicesList"></div>
+            </section>
 
-            <button class="btn-save" style="margin-top: 16px;" onclick="saveFooterContacto()"><i class="fas fa-save"></i> Guardar contacto y redes</button>
+            <section class="admin-section" id="section-faq">
+                <div class="admin-toolbar"><div></div><button class="btn-save" id="btnNewFaq"><i class="fas fa-plus"></i> Nueva pregunta</button></div>
+                <div id="faqAdminList"></div>
+            </section>
+
+            <section class="admin-section" id="section-nosotros">
+                <div class="admin-table-wrap" style="padding:26px;">
+                    <div class="form-group"><label for="content-subtitle">Subtítulo pequeño</label><input type="text" id="content-subtitle" placeholder="QUIÉNES SOMOS"></div>
+                    <div class="form-group"><label for="content-title">Título grande</label><input type="text" id="content-title" placeholder="Vendemos tecnología, no promesas."></div>
+                    <div class="form-group"><label for="content-text">Párrafo de descripción</label><textarea id="content-text" rows="3"></textarea></div>
+                    <div class="form-group">
+                        <label>Foto de la sección</label>
+                        <div class="dropzone" id="contentDropzone"><i class="fas fa-cloud-arrow-up"></i><p>Arrastrá una foto o hacé clic para elegirla</p></div>
+                        <input type="file" id="content-image-input" accept="image/*" class="hidden">
+                        <div class="photo-grid" id="contentPhotoGrid"></div>
+                    </div>
+                    <div class="section-title-mini">4 features destacadas</div>
+                    <div class="field-grid" style="margin-bottom:18px;">
+                        <div class="form-group"><label>Feature 1 — título</label><input type="text" id="content-feature1-title" placeholder="Garantía oficial"></div>
+                        <div class="form-group"><label>Feature 1 — texto</label><input type="text" id="content-feature1-text"></div>
+                        <div class="form-group"><label>Feature 2 — título</label><input type="text" id="content-feature2-title" placeholder="Envíos a todo el país"></div>
+                        <div class="form-group"><label>Feature 2 — texto</label><input type="text" id="content-feature2-text"></div>
+                        <div class="form-group"><label>Feature 3 — título</label><input type="text" id="content-feature3-title" placeholder="Pago flexible"></div>
+                        <div class="form-group"><label>Feature 3 — texto</label><input type="text" id="content-feature3-text"></div>
+                        <div class="form-group"><label>Feature 4 — título</label><input type="text" id="content-feature4-title" placeholder="Atención directa"></div>
+                        <div class="form-group"><label>Feature 4 — texto</label><input type="text" id="content-feature4-text"></div>
+                    </div>
+                    <button class="btn-save" id="btnSaveAbout"><i class="fas fa-save"></i> Guardar cambios</button>
+                </div>
+            </section>
+
+            <section class="admin-section" id="section-contacto">
+                <div class="admin-table-wrap" style="padding:26px; max-width:560px;">
+                    <div class="field-grid">
+                        <div class="form-group"><label>WhatsApp</label><input type="text" id="footer-whatsapp" placeholder="595991192212"></div>
+                        <div class="form-group"><label>Mensaje de bienvenida</label><input type="text" id="footer-wa-message"></div>
+                        <div class="form-group"><label>Email de contacto</label><input type="email" id="footer-email"></div>
+                        <div class="form-group"><label>Dirección</label><input type="text" id="footer-address"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Redes sociales</label>
+                        <div id="social-rows-container"></div>
+                        <button type="button" class="btn-outline-gray" style="width:auto; padding:9px 16px; margin-top:6px;" onclick="addSocialRow()"><i class="fas fa-plus"></i> Agregar red</button>
+                    </div>
+                    <button class="btn-save" id="btnSaveContact" style="margin-top:10px;"><i class="fas fa-save"></i> Guardar cambios</button>
+                </div>
+            </section>
+
+            <section class="admin-section" id="section-portada">
+                <div class="admin-table-wrap" style="padding:26px; max-width:600px;">
+                    <div class="form-group"><label for="hero-title">Título grande</label><input type="text" id="hero-title"></div>
+                    <div class="form-group"><label for="hero-text">Texto debajo del título</label><textarea id="hero-text" rows="2"></textarea></div>
+                    <div class="form-group">
+                        <label>Foto de fondo / producto destacado</label>
+                        <div class="dropzone" id="heroDropzone"><i class="fas fa-cloud-arrow-up"></i><p>Arrastrá una foto o hacé clic para elegirla</p></div>
+                        <input type="file" id="hero-image-input" accept="image/*" class="hidden">
+                        <div class="photo-grid" id="heroPhotoGrid"></div>
+                    </div>
+                    <button class="btn-save" id="btnSaveHero"><i class="fas fa-save"></i> Guardar portada</button>
+                </div>
+            </section>
         </div>
-
-        <!-- ============ PORTADA ============ -->
-        <div class="admin-card">
-            <span class="eyebrow">Primera impresión</span>
-            <h2>Portada principal</h2>
-            <p class="card-desc">Es lo primero que ve la gente al entrar al sitio.</p>
-
-            <div class="form-group">
-                <label>Título grande</label>
-                <input type="text" id="hero-title" placeholder="Todo lo que buscás, en un solo lugar.">
-            </div>
-            <div class="form-group">
-                <label>Texto debajo del título</label>
-                <textarea id="hero-text" rows="2" placeholder="Notebooks, componentes, periféricos y celulares..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Foto de fondo / producto destacado</label>
-                <img id="hero-image-preview" src="" style="display:none; max-width: 260px; width: 100%; border-radius: 14px; margin-bottom: 12px;">
-                <input type="file" id="hero-image-input" accept="image/*" style="display:none" onchange="handleContentImageSelect(this.files, 'hero')">
-                <button type="button" class="btn-blue" onclick="document.getElementById('hero-image-input').click()">
-                    <i class="fas fa-crop"></i> Elegir y recortar imagen
-                </button>
-            </div>
-
-            <button class="btn-save" onclick="saveHero()"><i class="fas fa-save"></i> Guardar portada</button>
-        </div>
-
     </div>
 </div>
 
-<!-- MODAL DE RECORTE -->
+<div class="drawer-overlay" id="productDrawer">
+    <div class="drawer">
+        <div class="drawer-head"><h3 id="productDrawerTitle">Nuevo producto</h3><button class="drawer-close" id="productDrawerClose"><i class="fas fa-xmark"></i></button></div>
+        <div class="drawer-body">
+            <div class="section-title-mini">Fotos</div>
+            <div class="dropzone" id="drop-zone"><i class="fas fa-cloud-arrow-up"></i><p>Arrastrá las fotos aquí o hacé clic para seleccionar</p></div>
+            <input type="file" id="file-input" multiple accept="image/*" class="hidden">
+            <div class="photo-grid" id="image-preview"></div>
+
+            <div class="section-title-mini">Datos generales</div>
+            <div class="form-group"><label>Nombre del producto</label><input type="text" id="prod-title" placeholder='Ej: Notebook 15.6" Ryzen 5'></div>
+            <div class="field-grid">
+                <div class="form-group"><label>Categoría</label>
+                    <select id="prod-category">
+                        <option value="notebooks">💻 Notebooks</option><option value="perifericos">⌨️ Periféricos</option>
+                        <option value="componentes">🔧 Componentes</option><option value="gaming">🎮 Gaming</option>
+                        <option value="celulares">📱 Celulares</option><option value="accesorios">🔌 Accesorios</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>SKU (opcional)</label><input type="text" id="prod-sku" placeholder="Se autogenera"></div>
+                <div class="form-group"><label>Estado de stock</label>
+                    <select id="prod-status"><option value="stock">🟢 En stock</option><option value="ultimas">🟡 Últimas unidades</option><option value="sinstock">🔴 Sin stock</option></select>
+                </div>
+                <div class="form-group"><label>Badge</label>
+                    <select id="prod-badge"><option value="">Sin badge</option><option value="oferta">🔴 Oferta</option><option value="nuevo">🟢 Nuevo</option><option value="destacado">🔵 Destacado</option></select>
+                </div>
+            </div>
+            <div class="form-group"><label>Descripción</label><textarea id="prod-description" rows="3"></textarea></div>
+            <div class="form-group"><label>Especificaciones (separadas por coma)</label><input type="text" id="prod-specs" placeholder="Ej: 16GB RAM, 512GB SSD"></div>
+
+            <div class="section-title-mini">Precio</div>
+            <div class="field-grid">
+                <div class="form-group"><label>Precio en guaraníes</label><input type="text" id="prod-price-gs" placeholder="6.490.000" oninput="formatNumber(this); updatePricePreview();"></div>
+                <div class="form-group"><label>Precio anterior (si hay oferta)</label><input type="text" id="prod-price-old" placeholder="Opcional" oninput="formatNumber(this); updatePricePreview();"></div>
+            </div>
+            <div class="price-preview-box" id="price-preview">Completá el precio arriba</div>
+
+            <div class="section-title-mini">Proveedor</div>
+            <div class="warning-box">
+                <label>🔒 Privado — nunca se muestra en el sitio público</label>
+                <input type="text" id="prod-supplier-name" placeholder="Nombre del proveedor" style="margin-bottom:10px;">
+                <input type="text" id="prod-supplier-phone" placeholder="Ej: 0986767459" oninput="formatOwnerPhone(this)">
+            </div>
+            <input type="hidden" id="edit-product-id" value="">
+        </div>
+        <div class="drawer-foot">
+            <button class="btn-outline-gray" id="productDrawerCancel">Cancelar</button>
+            <button class="btn-save" id="productDrawerSave">Guardar producto</button>
+        </div>
+    </div>
+</div>
+
+<div class="drawer-overlay" id="serviceDrawer">
+    <div class="drawer">
+        <div class="drawer-head"><h3 id="serviceDrawerTitle">Nuevo servicio</h3><button class="drawer-close" id="serviceDrawerClose"><i class="fas fa-xmark"></i></button></div>
+        <div class="drawer-body">
+            <div class="section-title-mini">Foto</div>
+            <div class="dropzone" id="service-drop-zone"><i class="fas fa-cloud-arrow-up"></i><p>Arrastrá una foto o hacé clic para elegirla</p></div>
+            <input type="file" id="service-file-input" accept="image/*" class="hidden">
+            <div class="photo-grid" id="service-image-preview"></div>
+            <div class="form-group"><label>Título del servicio</label><input type="text" id="service-title" placeholder="Ej: Armado de PC a medida"></div>
+            <div class="form-group"><label>Descripción</label><textarea id="service-description" rows="3"></textarea></div>
+            <input type="hidden" id="edit-service-id" value="">
+        </div>
+        <div class="drawer-foot">
+            <button class="btn-outline-gray" id="serviceDrawerCancel">Cancelar</button>
+            <button class="btn-save" id="serviceDrawerSave">Guardar servicio</button>
+        </div>
+    </div>
+</div>
+
+<div class="drawer-overlay" id="faqDrawer">
+    <div class="drawer">
+        <div class="drawer-head"><h3 id="faqDrawerTitle">Nueva pregunta</h3><button class="drawer-close" id="faqDrawerClose"><i class="fas fa-xmark"></i></button></div>
+        <div class="drawer-body">
+            <div class="form-group"><label>Pregunta</label><input type="text" id="faq-question-input" placeholder="Ej: ¿Hacen envíos al interior?"></div>
+            <div class="form-group"><label>Respuesta</label><textarea id="faq-answer-input" rows="4"></textarea></div>
+            <input type="hidden" id="edit-faq-id" value="">
+        </div>
+        <div class="drawer-foot">
+            <button class="btn-outline-gray" id="faqDrawerCancel">Cancelar</button>
+            <button class="btn-save" id="faqDrawerSave">Guardar pregunta</button>
+        </div>
+    </div>
+</div>
+
 <div class="crop-modal-overlay" id="crop-modal">
     <div class="crop-modal-box">
         <h3>Recortá tu imagen</h3>
-        <div id="crop-container">
-            <img id="crop-image" src="" draggable="false">
-            <div id="crop-rect">
-                <div class="crop-grid-line" style="left:33.333%; top:0; bottom:0; width:1px;"></div>
-                <div class="crop-grid-line" style="left:66.666%; top:0; bottom:0; width:1px;"></div>
-                <div class="crop-grid-line" style="top:33.333%; left:0; right:0; height:1px;"></div>
-                <div class="crop-grid-line" style="top:66.666%; left:0; right:0; height:1px;"></div>
-                <div class="crop-handle" data-corner="tl" style="top:-9px; left:-9px; border-top:4px solid var(--purple); border-left:4px solid var(--purple); cursor:nwse-resize;"></div>
-                <div class="crop-handle" data-corner="tr" style="top:-9px; right:-9px; border-top:4px solid var(--purple); border-right:4px solid var(--purple); cursor:nesw-resize;"></div>
-                <div class="crop-handle" data-corner="bl" style="bottom:-9px; left:-9px; border-bottom:4px solid var(--purple); border-left:4px solid var(--purple); cursor:nesw-resize;"></div>
-                <div class="crop-handle" data-corner="br" style="bottom:-9px; right:-9px; border-bottom:4px solid var(--purple); border-right:4px solid var(--purple); cursor:nwse-resize;"></div>
+        <div class="crop-stage" id="cropStage">
+            <img id="cropImg" src="" draggable="false">
+            <div class="crop-frame" id="cropFrame">
+                <span class="crop-handle nw"></span><span class="crop-handle ne"></span>
+                <span class="crop-handle sw"></span><span class="crop-handle se"></span>
             </div>
         </div>
-        <p class="crop-hint">Arrastrá las esquinas para ajustar el recorte, o el centro para moverlo</p>
-        <div class="btn-row" style="margin-top:14px;">
-            <button class="btn-outline-gray" onclick="cancelCrop()">Cancelar</button>
-            <button class="btn-save" onclick="confirmCrop()">Usar esta imagen</button>
+        <p class="crop-hint">Arrastrá el recuadro para mover, y las esquinas para cambiar el tamaño</p>
+        <div class="btn-row">
+            <button class="btn-outline-gray" id="cropCancel">Cancelar</button>
+            <button class="btn-save" id="cropApply">Aplicar recorte</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL DE CONFIRMACIÓN -->
 <div class="confirm-modal-overlay" id="confirm-modal">
     <div class="confirm-modal-box">
         <div class="emoji">📝</div>
-        <h3>Tenés cambios sin guardar</h3>
-        <p id="confirm-modal-text">Si salís ahora, vas a perder los datos que escribiste. ¿Qué querés hacer?</p>
+        <h3 id="confirm-modal-title">¿Confirmar acción?</h3>
+        <p id="confirm-modal-text">Esta acción no se puede deshacer.</p>
         <div class="btn-row">
-            <button class="btn-outline-gray" onclick="closeConfirmModal()">Seguir editando</button>
-            <button id="confirm-modal-action-btn" style="flex:1; padding:13px; border:none; background:#E14D4D; color:white; border-radius:12px; font-weight:600; cursor:pointer;">Salir igual</button>
+            <button class="btn-outline-gray" id="confirmCancel">Cancelar</button>
+            <button id="confirm-modal-action-btn" class="btn-danger">Confirmar</button>
         </div>
     </div>
 </div>
